@@ -102,8 +102,7 @@ public:
 
     // Finds a specific Release record in the file
     // @param releaseID - The ID of the release to find
-    // @param releaseObject - The Release object to fill with data if found
-    // @return - True if the record was found, false otherwise
+    // @return - The Release object with data if found; otherwise empty Release object
     static Release findReleaseRecord(int releaseID);
 
 private:

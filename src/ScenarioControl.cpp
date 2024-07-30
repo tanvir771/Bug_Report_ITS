@@ -25,9 +25,11 @@ ScenarioControl::ScenarioControl()
 Product ScenarioControl::createProduct()
 {
     int productID;
+    int releaseID;
     std::string name;
     std::string version;
 
+    // TODO: should make the ID assignment automatic
     std::cout << "Enter Product ID: ";
     std::cin >> productID;
     std::cin.ignore(); // To ignore the newline character left by std::cin
@@ -38,10 +40,36 @@ Product ScenarioControl::createProduct()
     std::cout << "Enter Product Version: ";
     std::getline(std::cin, version);
 
-    // TODO: simple release for testing; we need to change this to load up a Release based on the releaseID
-    Release r = Release();
+    std::cout << "Enter Release ID: ";
+    std::cin >> releaseID;
 
-    Product newProduct = Product(productID, r, name, version);
+    Release tempRelease = Release::findReleaseRecord(releaseID);
+
+    if (tempRelease.getReleaseID() == 0) {
+        // then empty release returned - no such Release in file, create a Release object first
+        // some temp variables to store release info
+        
+        std::string tempVersion;
+        std::string tempReleaseDate;
+
+        std::cout << "No Release ID found - create a new Release" << std::endl; // TODO: ask if they want to try again or create new Release object
+        std::cout << "Enter Release ID: ";
+        std::cin >> tempReleaseID;
+        std::cin.ignore(); // To ignore the newline character left by std::cin
+
+        std::cout << "Enter Release Version: ";
+        std::getline(std::cin, tempVersion);
+
+        std::cout << "Enter Release Date: ";
+        std::getline(std::cin, tempReleaseDate);
+
+        tempRelease.setProductID(productID);        // productID already stored;
+        tempRelease.setReleaseDate(tempReleaseDate);
+        tempRelease.setReleaseID(tempReleaseID);
+        tempRelease.setVersion(tempVersion);
+    }
+
+    Product newProduct = Product(productID, tempRelease, name, version);
 
     Product::writeProduct(newProduct);
 
@@ -50,6 +78,7 @@ Product ScenarioControl::createProduct()
     Product::getNext(readProduct, 0);
 
     std::cout << readProduct.getName() << std::endl;
+    std::cout << readProduct.getReleaseDate() << std::endl;
 
     return newProduct;
 }
