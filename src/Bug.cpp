@@ -144,7 +144,7 @@ void Bug::closeReadFile()
 // Expectations: opens the files and closes the file after writing
 bool Bug::writeBug(Bug& bugObject) {
     if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat")) {       // TODO: Refractor path to static variable; path should also be relative
-        std::cout << "Could not open Request Write file" << std::endl;
+        std::cout << "Could not open Bug Write file" << std::endl;
         return false;
     }
 

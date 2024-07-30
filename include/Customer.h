@@ -76,18 +76,26 @@ public:
 
     // File operations
 
-    // Opens the file for reading and writing
+    // Opens the file for writing
     // @param filename - The name of the file to open
     // @return True if the file was successfully opened, false otherwise
-    static bool openReleaseFile(const std::string& filename);
+    static bool openWriteFile(const std::string& fileName);
+
+    // Opens the file for reading
+    // @param fileName - The name of the file to open
+    // @return True if the file was successfully opened, false otherwise
+    static bool openReadFile(const std::string& fileName);
 
     // Closes the currently open file
-    static void closeCustomerFile();
+    static void closeWriteFile();
+
+    // Closes the currently open file
+    static void closeReadFile();
 
     // Writes a Customer object to the file
     // @param - customerObject - The Customer object to write
     // @return - True if the write operation was successful, false otherwise
-    static bool writeCustomer(const Customer& customerObject);
+    static bool Customer::writeCustomer(Customer& customerObject);
 
     // Moves the file cursor to the beginning of the file
     static void seekToBeginningOfFile();
@@ -95,7 +103,7 @@ public:
     // Reads the next Customer object from the file
     // @param customerObject - The Customer object to fill with data from the file
     // @return - True if a record was successfully read, false if the end of the file was reached
-    static bool getNext(Customer& customerObject);
+    static bool getNext(Customer& customerObject, int index);
 
     // Deletes a specific Customer record from the file
     // @param customerName - The name of the Customer to delete
@@ -104,8 +112,7 @@ public:
 
     // Finds a specific Customer record in the file
     // @param customerName - The Name of the release to find
-    // @param customerObject - The Product object to fill with data if found
-    // @return - True if the record was found, false otherwise
+    // @return customerObject - The object with data if found; otherwise empty Object (customerName = "")
     static Customer findCustomerRecord(std::string customerName);
 
 private:
@@ -115,8 +122,9 @@ private:
     bool isEmployee;  // Indicates if the customer is an employee
     char department[100];  // The department of the customer, empty string if not an employee
 
-    
-    static std::fstream file;  // The file stream used for file operations
-    static std::string filename;  // The name of the currently open file
+    static std::string fileName;  // The name of the currently open file
+
+    static std::ofstream fout;    // stream for writing to files
+    static std::fstream fin;      // stream for reading to files
 };
 

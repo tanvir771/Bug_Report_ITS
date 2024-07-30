@@ -162,15 +162,9 @@ bool ScenarioControl::deleteBug()
 // Customer operations
 Customer ScenarioControl::createCustomer()
 {
-    int customerID;
     std::string name;
     std::string phone;
     std::string email;
-
-    // TODO: automate customer ID
-    std::cout << "Enter Customer ID: ";
-    std::cin >> customerID;
-    std::cin.ignore(); // To ignore the newline character left by std::cin
 
     std::cout << "Enter Customer Name: ";
     std::getline(std::cin, name);
@@ -202,15 +196,13 @@ bool ScenarioControl::deleteCustomer()
 // Request operations
 Request ScenarioControl::createRequest()
 {
-    // TODO: ID for requests need to be automated
-    int requestID;
     std::string description;
     std::string priority;
     std::string status;
     std::string dateOfRequest;
     int productID;
     std::string customerName;
-    int releaseID;
+    int releaseID;          // TODO: product should already have a release id associated with it
 
     std::cin.ignore();
 
@@ -231,7 +223,18 @@ Request ScenarioControl::createRequest()
     std::cin.ignore();
 
     std::cout << "Enter Customer Name: ";
-    std::getline(std::cin, customerName);
+    std::getline(std::cin, customerName); 
+
+    Customer tempCustomer = Customer::findCustomerRecord(customerName);
+
+    if (tempCustomer.getCustomerName() == "") {
+        // no customer with that name found
+        createCustomer();
+    }
+    else {
+        std::cout << "Found it: " << tempCustomer.getPhone() << std::endl;
+    }
+
 
     // TODO: product should already have an associated release ID
     std::cout << "Enter Release ID: ";
