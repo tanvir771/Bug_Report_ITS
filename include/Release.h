@@ -20,8 +20,6 @@ public:
     // Default constructor initializes an empty release object
     Release();
 
-
-
     // Parameterized constructor initializes a release object with specific details
     // @param releaseID - The ID of the release
     // @param version - The version of the release
@@ -58,11 +56,11 @@ public:
 
     // Sets the version of the release
     // @param version - The version string
-    void setVersion(const std::string& version);
+    bool setVersion(const std::string& version);
 
     // Sets the release date
     // @param releaseDate - The release date string
-    void setReleaseDate(const std::string& releaseDate);
+    bool setReleaseDate(const std::string& releaseDate);
 
     // File operations
 
@@ -111,8 +109,8 @@ public:
 private:
     int releaseID;                // The release ID (PK)
     int productID;                // Associated Product ID (FK)
-    std::string version;          // The version of the release
-    std::string releaseDate;      // The release date
+    char version[50];          // The version of the release
+    char releaseDate[100];      // The release date
 
     static std::string fileName;  // The name of the currently open file
 

@@ -21,12 +21,15 @@ std::fstream Product::fin;
 
 // Default constructor
 Product::Product() : productID(0), isAnticipatedRelease(false) {
-    
+    // name is the attribute - explicit: this->name
+    std::memset(name, 0, sizeof(name));
 }
 
 // Parameterized constructor
 Product::Product(int productID, Release& release, const std::string &name, const std::string &releaseDate)
-    : productID(productID),  productRelease(release), name(name), isAnticipatedRelease(false) {}
+    : productID(productID),  productRelease(release), isAnticipatedRelease(false) {
+    std::strncpy(this->name, name.c_str(), sizeof(this->name) - 1);
+}
 
 // Getter for Product ID
 int Product::getProductID() const {
@@ -66,11 +69,12 @@ bool Product::setProductID(int newProductID) {
 
 // Setter for Product name
 bool Product::setName(const std::string& newName) {
-    if (!newName.empty()) {
-        name = newName;
-        return true;
+    if (newName.size() >= sizeof(this->name)) {
+        return false; // Input string too long
     }
-    return false;
+    std::strncpy(this->name, newName.c_str(), sizeof(this->name) - 1);
+    this->name[sizeof(this->name) - 1] = '\0'; // Ensure null-termination
+    return true;
 }
 
 // Setter for Product Release

@@ -7,6 +7,7 @@
 ///
 
 #include <iostream>
+#include <cstring>
 #include "Release.h"
 
 // Define and initialize the static member variables
@@ -16,11 +17,17 @@ std::ofstream Release::fout;
 std::fstream Release::fin;
 
 // Constructors
-Release::Release() : releaseID(0), productID(0), version(""), releaseDate("") {}
+Release::Release() : releaseID(0), productID(0) {
+    // referring to attributes - eg. this->version
+    std::memset(version, 0, sizeof(version));
+    std::memset(releaseDate, 0, sizeof(releaseDate));
+}
 
 Release::Release(int releaseID, int productID, const std::string& version, const std::string& releaseDate)
-    : releaseID(releaseID), productID(productID), version(version), releaseDate(releaseDate) 
-{}
+    : releaseID(releaseID), productID(productID) {
+    std::strncpy(this->version, version.c_str(), sizeof(this->version) - 1);
+    std::strncpy(this->releaseDate, releaseDate.c_str(), sizeof(this->releaseDate) - 1);
+}
 
 // Getters
 int Release::getReleaseID() const {
@@ -48,12 +55,23 @@ void Release::setProductID(int productID) {
     this->productID = productID;
 }
 
-void Release::setVersion(const std::string& version) {
-    this->version = version;
+bool Release::setVersion(const std::string& version) {
+    // explicit attribute to avoid confusing with argument
+    if (version.size() >= sizeof(this->version)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->version, version.c_str(), sizeof(this->version) - 1);
+    this->version[sizeof(this->version) - 1] = '\0'; // Ensure null-termination
+    return true;
 }
 
-void Release::setReleaseDate(const std::string& releaseDate) {
-    this->releaseDate = releaseDate;
+bool Release::setReleaseDate(const std::string& releaseDate) {
+    if (releaseDate.size() >= sizeof(this->releaseDate)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->releaseDate, releaseDate.c_str(), sizeof(this->releaseDate) - 1);
+    this->releaseDate[sizeof(this->releaseDate) - 1] = '\0'; // Ensure null-termination
+    return true;
 }
 
 // File operations

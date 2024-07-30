@@ -38,10 +38,18 @@ Product ScenarioControl::createProduct()
     std::cout << "Enter Product Version: ";
     std::getline(std::cin, version);
 
-    // TODO: simple release; change later
+    // TODO: simple release for testing; we need to change this to load up a Release based on the releaseID
     Release r = Release();
 
     Product newProduct = Product(productID, r, name, version);
+
+    Product::writeProduct(newProduct);
+
+    Product readProduct;
+
+    Product::getNext(readProduct, 0);
+
+    std::cout << readProduct.getName() << std::endl;
 
     return newProduct;
 }
