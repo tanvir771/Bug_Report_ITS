@@ -66,10 +66,11 @@ Bug ScenarioControl::createBug()
     std::string description;
     std::string severity;
     std::string status;
-    int productReleaseID;
+    int productID;
+    int releaseID;
 
     std::cout << "Enter Bug ID: ";
-    std::cin >> bugID;
+    std::cin >> bugID;                      // TODO: ID needs to be static - we also might need to check if other bugs exist in file, and then start counting from there
     std::cin.ignore(); // To ignore the newline character left by std::cin
 
     std::cout << "Enter Bug Description: ";
@@ -81,12 +82,23 @@ Bug ScenarioControl::createBug()
     std::cout << "Enter Bug Status: ";
     std::getline(std::cin, status);
 
-    std::cout << "Enter Product Release ID: ";
-    std::cin >> productReleaseID;
+    std::cout << "Enter product ID: ";
+    std::cin >> productID;
 
-    Bug newBug = Bug(bugID, description, severity, status, productReleaseID);
+    std::cout << "Enter release ID: ";
+    std::cin >> releaseID;
 
-    return Bug();
+    Bug newBug = Bug(bugID, description, severity, status, productID, releaseID);
+
+    Bug::writeBug(newBug);
+
+    Bug readBug;
+
+    Bug::getNext(readBug, 0);
+
+    std::cout << readBug.getDescription() << std::endl;
+
+    return newBug;
 }
 
 bool ScenarioControl::deleteBug()
@@ -124,6 +136,8 @@ Customer ScenarioControl::createCustomer()
 
     Customer newCustomer = Customer(name, phone, email);
     std::cout << "Customer created successfully!" << std::endl;
+
+    Customer::writeCustomer(newCustomer);
     return Customer();
 }
 
@@ -194,6 +208,19 @@ bool ScenarioControl::deleteRequest()
     return true;
 }
 
+bool ScenarioControl::modifyRequest()
+{
+    int requestID;
+
+    std::cout << "Enter Request ID: ";
+    std::cin >> requestID;
+    std::cin.ignore();
+
+    request.deleteRequestRecord(requestID);
+
+    return true;
+}
+
 // Private helper functions to find objects by ID
 Product ScenarioControl::findProduct()
 {
@@ -206,7 +233,7 @@ Product ScenarioControl::findProduct()
     return product.findProductRecord(productID);
 }
 
-Bug ScenarioControl::findBug()
+Bug ScenarioControl::modifyBug()
 {
     int bugID;
 
@@ -214,7 +241,7 @@ Bug ScenarioControl::findBug()
     std::cin >> bugID;
     std::cin.ignore();
     // Function body not implemented
-    return bug.findBugRecord(bugID);
+    return Bug::findBugRecord(bugID);
 }
 
 Customer ScenarioControl::findCustomer()
@@ -227,6 +254,7 @@ Customer ScenarioControl::findCustomer()
     return customer.findCustomerRecord(customerName);
 }
 
+
 Request ScenarioControl::findRequest()
 {
     int requestID;
@@ -235,4 +263,26 @@ Request ScenarioControl::findRequest()
     std::cin >> requestID;
     std::cin.ignore();
     return request.findRequestRecord(requestID);
+}
+
+void ScenarioControl::report1()
+{
+    int productID;
+
+    std::cout << "Enter Product ID: ";
+    std::cin >> productID;
+    std::cin.ignore();
+    // Function body not implemented
+    Bug::printBugsByProduct(productID);
+}
+
+void ScenarioControl::report2()
+{
+    std::string severity;
+
+    std::cout << "Enter Severity: ";
+    std::cin >> severity;
+    std::cin.ignore();
+    // Function body not implemented
+    Bug::printBugsBySeverity(severity);
 }

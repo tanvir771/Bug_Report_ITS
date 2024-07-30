@@ -20,13 +20,18 @@ std::ofstream Request::fout;
 std::fstream Request::fin;
 
 // Constructors
-Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {}
+Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
+    std::memset(description, 0, sizeof(this->description));
+    std::memset(severity, 0, sizeof(this->severity));
+    std::memset(status, 0, sizeof(this->status));
+}
 
 Request::Request(int changeRequestID, const std::string& description, const std::string& priority, 
                  const std::string& status, const std::string& dateOfRequest, int productID, 
                  const std::string& customerName, int releaseID)
-    : changeRequestID(changeRequestID), description(description), priority(priority), status(status), 
-      dateOfRequest(dateOfRequest), productID(productID), customerName(customerName), releaseID(releaseID) {}
+    : changeRequestID(changeRequestID), productID(productID), releaseID(releaseID) {
+
+}
 
 // Getters
 int Request::getRequestID() const {
@@ -193,8 +198,33 @@ bool Request::getNext(Request& requestObject, int index) {
 }
 
 bool Request::deleteRequestRecord(int changeRequestID) {
-    // Implementation to delete a record
-    return false; // Placeholder
+    int num = 1;
+    if (Request::fin.is_open()) {
+        std::fstream tempFile("temp.dat", std::ios::out | std::ios::binary);
+        Request tempRequest;
+        bool found = false;
+
+        seekToBeginningOfFile();
+        while (getNext(tempRequest, num)) {
+            if (tempRequest.getProductID() != changeRequestID) {
+                tempFile.write(reinterpret_cast<const char*>(&tempRequest), sizeof(Request));
+            }
+            else {
+                found = true;
+            }
+            num++;
+        }
+
+        Request::fin.close();
+        tempFile.close();
+
+        remove(fileName.c_str());
+        rename("temp.dat", fileName.c_str());
+
+        openWriteFile(fileName);
+        return found;
+    }
+    return false;
 }
 
 Request Request::findRequestRecord(int changeRequestID) {
@@ -214,5 +244,5 @@ Bug Request::convertToBug() const {
     if (description.empty() || priority.empty() || status.empty() || productID == 0 || releaseID == -1) {
         throw std::invalid_argument("Insufficient information to convert Request to Bug");
     }
-    return Bug(changeRequestID, description, priority, status, releaseID);
+    return Bug(changeRequestID, description, priority, status, productID, releaseID);
 }

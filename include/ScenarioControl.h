@@ -89,6 +89,7 @@ public:
      ///
     bool deleteRequest();
 
+    bool modifyRequest();
 
     // Private helper functions to find objects by ID
     /////
@@ -103,7 +104,7 @@ public:
      // @param bugID The ID of the bug to find.
      // @return Bug// Pointer to the found Bug object, or nullptr if not found.
      ///
-    Bug findBug();
+    Bug modifyBug();
 
     /////
      // @brief Finds a Customer object by ID.
@@ -118,6 +119,14 @@ public:
      // @return Request// Pointer to the found Request object, or nullptr if not found.
      ///
     Request findRequest();
+
+    // Reports bugs by Product ID
+    // Prints all Bugs associated to console
+    void report1();
+
+    // Reports bugs by severity
+    // Prints all Bugs associated to console
+    void report2();
 private:
     // Placeholder variable
     Product product;

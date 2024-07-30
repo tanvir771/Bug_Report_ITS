@@ -24,7 +24,7 @@ public:
     // @param status - Status of the bug
     // @param productReleaseID - ID of the related product release
     Bug(int bugID, const std::string& description, const std::string& severity, 
-        const std::string& status, int productReleaseID);
+        const std::string& status, int productID, int releaseID);
 
     // Getters - all const as they do not change anything
 
@@ -44,9 +44,13 @@ public:
     // @return - returns the associated string status
     std::string getStatus() const;
 
-    // Gets the product release ID related to the bug
-    // @return - returns the associated integer product release ID
-    int getProductReleaseID() const;
+    // Gets the product ID related to the bug
+    // @return - returns the associated integer product ID
+    int getProductID() const;
+
+    // Gets the release ID related to the Bug's Product
+    // @return - returns the associated integer releaseID
+    int getReleaseID() const;
 
     // Setters - no const promise because they change attributes
 
@@ -54,6 +58,17 @@ public:
     // @param bugID - The bug ID to set
     // @return - returns true if successful, false otherwise
     bool setBugID(int bugID);
+
+
+    // Sets the product ID
+    // @param product ID - The product ID to set
+    // @return - returns true if successful, false otherwise
+    bool setProductID(int productID);
+
+    // Sets the release ID
+    // @param release ID - The product ID to set
+    // @return - returns true if successful, false otherwise
+    bool setReleaseID(int releaseID);
 
     // Sets the description of the bug
     // @param description - The description to set
@@ -70,25 +85,29 @@ public:
     // @return - returns true if successful, false otherwise
     bool setStatus(const std::string& status);
 
-    // Sets the product release ID related to the bug
-    // @param productReleaseID - The product release ID to set
-    // @return - returns true if successful, false otherwise
-    bool setProductReleaseID(int productReleaseID);
 
     // File operations
 
     // Opens the file for reading and writing
     // @param filename - The name of the file to open
     // @return True if the file was successfully opened, false otherwise
-    static bool openBugFile(const std::string& filename);
+    static bool openWriteFile(const std::string& fileName);
+
+    // Opens the file for reading
+    // @param fileName - The name of the file to open
+    // @return True if the file was successfully opened, false otherwise
+    static bool openReadFile(const std::string& fileName);
 
     // Closes the currently open file
-    static void closeBugFile();
+    static void closeWriteFile();
+
+    // Closes the currently open file
+    static void closeReadFile();
 
     // Writes a Bug object to the file
     // @param bugObject - The Bug object to write
     // @return - True if the write operation was successful, false otherwise
-    static bool writeBug(const Bug& bugObject);
+    static bool writeBug(Bug& bugObject);
 
     // Moves the file cursor to the beginning of the file
     static void seekToBeginningOfFile();
@@ -96,7 +115,7 @@ public:
     // Reads the next Bug object from the file
     // @param bugObject - The Bug object to fill with data from the file
     // @return - True if a record was successfully read, false if the end of the file was reached
-    static bool getNext(Bug& bugObject);
+    static bool getNext(Bug& bugObject, int index);
 
     // Deletes a specific Bug record from the file
     // @param bugID - The ID of the bug to delete
@@ -109,14 +128,27 @@ public:
     // @return - True if the record was found, false otherwise
     static Bug findBugRecord(int bugID);
 
-private:
-    int bugID;  // The bug ID
-    std::string description;  // The description of the bug
-    std::string severity;  // The severity of the bug
-    std::string status;  // The status of the bug
-    int productReleaseID;  // The ID of the related product release
+    // Finds specific Bugs record in the file by productID
+    // @param productID - Product ID associated with the bug to find
+    // @return - None (void) - prints all bugs to console
+    static void printBugsByProduct(int productID);
 
-    static std::fstream file;  // The file stream used for file operations
-    static std::string filename;  // The name of the currently open file
+    // Finds specific Bugs record in the file by serverity
+    // @param serverity - String representing the serverity of the bug
+    // @return - None (void) - prints all bugs to console
+    static void printBugsBySeverity(std::string serverity);
+
+private:
+    int bugID;               // The bug ID
+    char description[500]; // The description of the bug
+    char severity[100];    // The severity of the bug
+    char status[100];      // The status of the bug
+    int productID;           // The product ID of the Product related to the Bug
+    int releaseID;           // The ID of the related product release
+
+    static std::string fileName;  // The name of the currently open file
+
+    static std::ofstream fout;    // stream for writing to files
+    static std::fstream fin;      // stream for reading to files
 };
 

@@ -163,16 +163,15 @@ public:
 
 private:
     int changeRequestID;  // The change request ID
-    std::string description;  // The description of the request
-    std::string priority;  // The priority of the request
-    std::string status;  // The status of the request
-    std::string dateOfRequest;  // The date the request was made
+    char description[500];  // The description of the request
+    char priority[100];  // The priority of the request
+    char status[100];  // The status of the request
+    char dateOfRequest[100];  // The date the request was made
     int productID;  // The ID of the related product
-    std::string customerName;  // The name of the customer making the request
+    char customerName[150];  // The name of the customer making the request
     int releaseID;  // The ID of the related release, or -1 if not set
 
     static std::string fileName;  // The name of the currently open file
-
 
     static std::ofstream fout;    // stream for writing to files
     static std::fstream fin;      // stream for reading to files
