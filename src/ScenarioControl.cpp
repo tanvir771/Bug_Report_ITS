@@ -107,7 +107,7 @@ Bug ScenarioControl::createBug()
     int releaseID;
 
     std::cout << "Enter Bug ID: ";
-    std::cin >> bugID;                      // TODO: ID needs to be static - we also might need to check if other bugs exist in file, and then start counting from there
+    std::cin >> bugID;  // TODO: ID needs to be static - we also might need to check if other bugs exist in file, and then start counting from there
     std::cin.ignore(); // To ignore the newline character left by std::cin
 
     std::cout << "Enter Bug Description: ";

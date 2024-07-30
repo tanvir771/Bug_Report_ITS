@@ -109,11 +109,11 @@ public:
     static Customer findCustomerRecord(std::string customerName);
 
 private:
-    std::string customerName;  // The name of the customer
-    std::string phone;  // The phone number of the customer
-    std::string email;  // The email address of the customer
+    char customerName[150];  // The name of the customer
+    char phone[100];  // The phone number of the customer
+    char email[150];  // The email address of the customer
     bool isEmployee;  // Indicates if the customer is an employee
-    std::string department;  // The department of the customer, empty string if not an employee
+    char department[100];  // The department of the customer, empty string if not an employee
 
     
     static std::fstream file;  // The file stream used for file operations

@@ -13,13 +13,24 @@
 std::fstream Customer::file;
 std::string Customer::filename = "customer_default.dat";
 
-Customer::Customer() : customerName(""), phone(""), email(""), isEmployee(false), department("")
+Customer::Customer() : isEmployee(false)
 {
+    // referring to attributes - eg. this->version
+    std::memset(customerName, 0, sizeof(customerName));
+    std::memset(phone, 0, sizeof(phone));
+    std::memset(email, 0, sizeof(email));
+    std::memset(department, 0, sizeof(department));
 }
 
 // Constructor - parameterized
 Customer::Customer(const std::string &name, const std::string &phone, const std::string &email)
-    : customerName(name), phone(phone), email(email), isEmployee(false), department("") {}
+    : isEmployee(false) {
+    // explicitly using this->description to avoid confusion with arguments
+    std::strncpy(this->customerName, name.c_str(), sizeof(this->customerName) - 1);
+    std::strncpy(this->phone, phone.c_str(), sizeof(this->phone) - 1);
+    std::strncpy(this->email, email.c_str(), sizeof(this->email) - 1);
+    std::strncpy(this->email, email.c_str(), sizeof(this->email) - 1);
+}
 
 // Getters
 std::string Customer::getCustomerName() const {
@@ -43,35 +54,52 @@ std::string Customer::getDepartment() const {
 }
 
 // Setters
-bool Customer::setCustomerName(const std::string &name) {
-    customerName = name;
+bool Customer::setCustomerName(const std::string& name) {
+    if (name.size() >= sizeof(this->customerName)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->customerName, name.c_str(), sizeof(this->customerName) - 1);
+    this->customerName[sizeof(this->customerName) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
-bool Customer::setPhone(const std::string &phone) {
-    this->phone = phone;
+bool Customer::setPhone(const std::string& phone) {
+    if (phone.size() >= sizeof(this->phone)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->phone, phone.c_str(), sizeof(this->phone) - 1);
+    this->phone[sizeof(this->phone) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
-bool Customer::setEmail(const std::string &email) {
-    this->email = email;
+bool Customer::setEmail(const std::string& email) {
+    if (email.size() >= sizeof(this->email)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->email, email.c_str(), sizeof(this->email) - 1);
+    this->email[sizeof(this->email) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
 bool Customer::setIsEmployee(bool isEmployee) {
     this->isEmployee = isEmployee;
     if (!isEmployee) {
-        department = "";
+        std::memset(this->department, 0, sizeof(this->department)); // Clear department if not an employee
     }
     return true;
 }
 
-bool Customer::setDepartment(const std::string &department) {
+bool Customer::setDepartment(const std::string& department) {
     if (isEmployee) {
-        this->department = department;
+        if (department.size() >= sizeof(this->department)) {
+            return false; // Input string too long
+        }
+        std::strncpy(this->department, department.c_str(), sizeof(this->department) - 1);
+        this->department[sizeof(this->department) - 1] = '\0'; // Ensure null-termination
         return true;
     }
     return false;
+}
 }
 
 // File operations
