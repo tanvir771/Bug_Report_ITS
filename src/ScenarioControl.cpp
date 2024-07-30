@@ -236,19 +236,32 @@ Request ScenarioControl::createRequest()
     // TODO: product should already have an associated release ID
     std::cout << "Enter Release ID: ";
     std::cin >> releaseID;
+    std::cin.ignore();
 
     Request newRequest = Request(Request::requestIDCount, description, priority, status, dateOfRequest, productID, customerName, releaseID);
-    std::cout << "Request created successfully!" << std::endl;
 
     Request::writeRequest(newRequest);
+    std::cout << "Request created successfully!" << std::endl;
 
-    Request readReq;
 
-    Request::getNext(readReq, 0);
+    while (true) {
+        std::string val;
+        std::cout << "Do you want to convert the current Request into a Bug (y/n): ";
+        std::getline(std::cin, val);
 
-    std::cout << readReq.getCustomerName() << std::endl;
-
-    createBugFromRequest(newRequest);
+        if (val == "y") {
+            createBugFromRequest(newRequest);
+            std::cout << "Bug created successfully!" << std::endl;
+            break;
+        }
+        else if (val == "n") {
+            std::cout << "Request ID: " << newRequest.getRequestID() << " saved, but no Bug created!" << std::endl;
+            break;
+        }
+        else {
+            std::cout << "Invalid Input" << std::endl;
+        }
+    }
 
     return newRequest;
 }
