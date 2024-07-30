@@ -16,11 +16,14 @@ std::string Bug::fileName = "bug_default.dat";  // You can set a default filenam
 std::ofstream Bug::fout;
 std::fstream Bug::fin;
 
+int Bug::bugIDCount = 0;
+
 // Constructor - default
 Bug::Bug() : bugID(0), productID(0), releaseID(0) {
     std::memset(description, 0, sizeof(description));
     std::memset(severity, 0, sizeof(severity));
     std::memset(status, 0, sizeof(status));
+    bugIDCount++;
 }
 
 // Parameterized constructor
@@ -30,11 +33,12 @@ Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::
     std::strncpy(description, desc.c_str(), sizeof(description) - 1);
     std::strncpy(severity, sev.c_str(), sizeof(severity) - 1);
     std::strncpy(status, stat.c_str(), sizeof(status) - 1);
+    bugIDCount++;
 }
 
 // Getters
 int Bug::getBugID() const {
-    return bugID;
+    return bugIDCount;
 }
 
 std::string Bug::getDescription() const {
@@ -60,7 +64,7 @@ int Bug::getReleaseID() const
 
 // Setters
 bool Bug::setBugID(int bugID) {
-    this->bugID = bugID;
+    this->bugIDCount = bugID;
     return true;
 }
 
@@ -257,6 +261,7 @@ void Bug::printBugsByProduct(int productID)
     int num = 0;
     while (getNext(bugObj, num)) {
         if (bugObj.getProductID() == productID) {
+            // TODO: First thing to work on : static count for bug not working
             std::cout << bugObj.getBugID() << bugObj.getDescription() << std::endl;
         }
         num++;

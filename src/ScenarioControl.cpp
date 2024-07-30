@@ -49,6 +49,7 @@ Product ScenarioControl::createProduct()
         // then empty release returned - no such Release in file, create a Release object first
         // some temp variables to store release info
         
+        int tempReleaseID;
         std::string tempVersion;
         std::string tempReleaseDate;
 
@@ -122,7 +123,7 @@ Bug ScenarioControl::createBug()
     std::cout << "Enter product ID: ";
     std::cin >> productID;
 
-    std::cout << "Enter release ID: ";
+    std::cout << "Enter release ID: ";          // TODO: remove this, since a product already has an associated release
     std::cin >> releaseID;
 
     Bug newBug = Bug(bugID, description, severity, status, productID, releaseID);
@@ -135,6 +136,14 @@ Bug ScenarioControl::createBug()
 
     std::cout << readBug.getDescription() << std::endl;
 
+    return newBug;
+}
+
+Bug ScenarioControl::createBugFromRequest(Request& reqObj)
+{
+    // TODO: check to make sure that if removing getReleaseID then we remove it here too
+    Bug newBug = Bug(Bug::bugIDCount, reqObj.getDescription(), reqObj.getPriority(), reqObj.getStatus(), reqObj.getProductID(), reqObj.getReleaseID());
+    Bug::writeBug(newBug);
     return newBug;
 }
 
@@ -158,6 +167,7 @@ Customer ScenarioControl::createCustomer()
     std::string phone;
     std::string email;
 
+    // TODO: automate customer ID
     std::cout << "Enter Customer ID: ";
     std::cin >> customerID;
     std::cin.ignore(); // To ignore the newline character left by std::cin
@@ -202,8 +212,6 @@ Request ScenarioControl::createRequest()
     std::string customerName;
     int releaseID;
 
-    std::cout << "Enter Request ID: ";
-    std::cin >> requestID;
     std::cin.ignore();
 
     std::cout << "Enter Request Description: ";
@@ -228,7 +236,7 @@ Request ScenarioControl::createRequest()
     std::cout << "Enter Release ID: ";
     std::cin >> releaseID;
 
-    Request newRequest = Request(requestID, description, priority, status, dateOfRequest, productID, customerName, releaseID);
+    Request newRequest = Request(Request::requestIDCount, description, priority, status, dateOfRequest, productID, customerName, releaseID);
     std::cout << "Request created successfully!" << std::endl;
 
     Request::writeRequest(newRequest);
@@ -238,6 +246,8 @@ Request ScenarioControl::createRequest()
     Request::getNext(readReq, 0);
 
     std::cout << readReq.getCustomerName() << std::endl;
+
+    createBugFromRequest(newRequest);
 
     return newRequest;
 }
@@ -255,6 +265,7 @@ bool ScenarioControl::deleteRequest()
     return true;
 }
 
+// TODO: modify request and modify bug - also need to have request turning into bug
 bool ScenarioControl::modifyRequest()
 {
     int requestID;
@@ -314,6 +325,7 @@ Request ScenarioControl::findRequest()
 
 void ScenarioControl::report1()
 {
+    // TODO: fix - reaches file end prematurely 
     int productID;
 
     std::cout << "Enter Product ID: ";
@@ -325,6 +337,7 @@ void ScenarioControl::report1()
 
 void ScenarioControl::report2()
 {
+    // TODO: fix - reaches file end prematurely 
     std::string severity;
 
     std::cout << "Enter Severity: ";

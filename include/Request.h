@@ -150,6 +150,11 @@ public:
     // @return - True if the record was found, false otherwise
     static Request findRequestRecord(int changeRequestID);
 
+    // TODO: make sure to change getters and setters to return this instead
+    // Keeps track of Request ID
+    static int requestIDCount;
+
+    // TODO: remove this since we are handling the conversion in ScenarioControl
     // Converts the request into a bug if sufficient information is available
     // Preconditions:
     //  - The request must have a valid description, priority, status, product ID, and a release ID
@@ -159,7 +164,7 @@ public:
     //  - If any precondition is not met, throws a std::invalid_argument exception
     // @return - A Bug object with information copied from the request
     // @throws std::invalid_argument if any required information is missing
-    Bug convertToBug() const;
+    //Bug convertToBug() const;
 
 private:
     int changeRequestID;  // The change request ID

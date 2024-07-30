@@ -16,9 +16,10 @@
 
 std::string Request::fileName = "request_default.dat";  // set a default fileName
 
-
 std::ofstream Request::fout;
 std::fstream Request::fin;
+
+int Request::requestIDCount = 0;
 
 // Constructors
 Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
@@ -28,6 +29,7 @@ Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
     std::memset(priority, 0, sizeof(priority));
     std::memset(dateOfRequest, 0, sizeof(dateOfRequest));
     std::memset(customerName, 0, sizeof(customerName));
+    requestIDCount++;
 }
 
 Request::Request(int changeRequestID, const std::string& description, const std::string& priority, 
@@ -40,6 +42,7 @@ Request::Request(int changeRequestID, const std::string& description, const std:
     std::strncpy(this->priority, priority.c_str(), sizeof(this->priority) - 1);
     std::strncpy(this->dateOfRequest, dateOfRequest.c_str(), sizeof(this->dateOfRequest) - 1);
     std::strncpy(this->customerName, customerName.c_str(), sizeof(this->customerName) - 1);
+    requestIDCount++;
 }
 
 // Getters

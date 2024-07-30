@@ -138,6 +138,8 @@ public:
     // @return - None (void) - prints all bugs to console
     static void printBugsBySeverity(std::string serverity);
 
+    static int bugIDCount; // Keeps track of the bug ID
+
 private:
     int bugID;               // The bug ID
     char description[500]; // The description of the bug

@@ -100,7 +100,6 @@ bool Customer::setDepartment(const std::string& department) {
     }
     return false;
 }
-}
 
 // File operations
 bool Customer::openReleaseFile(const std::string& filename) {

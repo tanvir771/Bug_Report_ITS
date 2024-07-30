@@ -24,9 +24,7 @@ public:
     // @param name The name of the product.
     // @param version The version of the product.
     // @return Product The created Product object.
-    //
     Product createProduct();
-
 
     // @brief Deletes a Product object from the product list by ID.
     // @param productID The ID of the product to delete.
@@ -34,7 +32,7 @@ public:
     bool deleteProduct();
 
     // Bug operations
-    // @brief Creates a new Bug object and adds it to the bug list.
+    // @brief Creates a new Bug object and adds it to the Bug file
     // @param bugID The ID of the bug.
     // @param description The description of the bug.
     // @param severity The severity of the bug.
@@ -42,6 +40,11 @@ public:
     // @return Bug The created Bug object.
     ///
     Bug createBug();
+
+    // @brief Creates a new Bug object from a Request object and writes it to Bug file
+    // @param reqObj - Request Object containing all information for a Bug
+    // @return Bug The created Bug object.
+    Bug createBugFromRequest(Request& reqObj);
 
     /////
      // @brief Deletes a Bug object from the bug list by ID.
