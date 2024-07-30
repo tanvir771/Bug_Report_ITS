@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <cstring>
 #include "Request.h"
 
 // Define and initialize the static member variables
@@ -21,16 +22,24 @@ std::fstream Request::fin;
 
 // Constructors
 Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
-    std::memset(description, 0, sizeof(this->description));
-    std::memset(severity, 0, sizeof(this->severity));
-    std::memset(status, 0, sizeof(this->status));
+    // each working with attributes - eg. description refers to this->description
+    std::memset(description, 0, sizeof(description));
+    std::memset(status, 0, sizeof(status));
+    std::memset(priority, 0, sizeof(priority));
+    std::memset(dateOfRequest, 0, sizeof(dateOfRequest));
+    std::memset(customerName, 0, sizeof(customerName));
 }
 
 Request::Request(int changeRequestID, const std::string& description, const std::string& priority, 
                  const std::string& status, const std::string& dateOfRequest, int productID, 
                  const std::string& customerName, int releaseID)
     : changeRequestID(changeRequestID), productID(productID), releaseID(releaseID) {
-
+    // explicitly using this->description to avoid confusion with arguments
+    std::strncpy(this->description, description.c_str(), sizeof(this->description) - 1);
+    std::strncpy(this->status, status.c_str(), sizeof(this->status) - 1);
+    std::strncpy(this->priority, priority.c_str(), sizeof(this->priority) - 1);
+    std::strncpy(this->dateOfRequest, dateOfRequest.c_str(), sizeof(this->dateOfRequest) - 1);
+    std::strncpy(this->customerName, customerName.c_str(), sizeof(this->customerName) - 1);
 }
 
 // Getters
@@ -73,22 +82,38 @@ bool Request::setRequestID(int requestID) {
 }
 
 bool Request::setDescription(const std::string& description) {
-    this->description = description;
+    if (description.size() >= sizeof(this->description)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->description, description.c_str(), sizeof(this->description) - 1);
+    this->description[sizeof(this->description) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
 bool Request::setPriority(const std::string& priority) {
-    this->priority = priority;
+    if (priority.size() >= sizeof(this->priority)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->priority, priority.c_str(), sizeof(this->priority) - 1);
+    this->priority[sizeof(this->priority) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
 bool Request::setStatus(const std::string& status) {
-    this->status = status;
+    if (status.size() >= sizeof(this->status)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->status, status.c_str(), sizeof(this->status) - 1);
+    this->status[sizeof(this->status) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
 bool Request::setDateOfRequest(const std::string& dateOfRequest) {
-    this->dateOfRequest = dateOfRequest;
+    if (dateOfRequest.size() >= sizeof(this->dateOfRequest)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->dateOfRequest, dateOfRequest.c_str(), sizeof(this->dateOfRequest) - 1);
+    this->dateOfRequest[sizeof(this->dateOfRequest) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
@@ -98,7 +123,11 @@ bool Request::setProductID(int productID) {
 }
 
 bool Request::setCustomerName(const std::string& customerName) {
-    this->customerName = customerName;
+    if (customerName.size() >= sizeof(this->customerName)) {
+        return false; // Input string too long
+    }
+    std::strncpy(this->customerName, customerName.c_str(), sizeof(this->customerName) - 1);
+    this->customerName[sizeof(this->customerName) - 1] = '\0'; // Ensure null-termination
     return true;
 }
 
@@ -240,9 +269,9 @@ Request Request::findRequestRecord(int changeRequestID) {
     return requestObj;
 }
 
-Bug Request::convertToBug() const {
-    if (description.empty() || priority.empty() || status.empty() || productID == 0 || releaseID == -1) {
-        throw std::invalid_argument("Insufficient information to convert Request to Bug");
-    }
-    return Bug(changeRequestID, description, priority, status, productID, releaseID);
-}
+//Bug Request::convertToBug() const {
+//    if (description.empty() || priority.empty() || status.empty() || productID == 0 || releaseID == -1) {
+//        throw std::invalid_argument("Insufficient information to convert Request to Bug");
+//    }
+//    return Bug(changeRequestID, description, priority, status, productID, releaseID);
+//}

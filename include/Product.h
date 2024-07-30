@@ -112,7 +112,7 @@ public:
 
 private:
     int productID;
-    std::string name;
+    char name[150];
     Release productRelease; // if a future Release, then this is the anticipatedRelease
     bool isAnticipatedRelease; // represents whether the Product Release is in the future or not
 

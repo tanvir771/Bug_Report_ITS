@@ -155,6 +155,7 @@ bool ScenarioControl::deleteCustomer()
 // Request operations
 Request ScenarioControl::createRequest()
 {
+    // TODO: ID for requests need to be automated
     int requestID;
     std::string description;
     std::string priority;
@@ -192,6 +193,15 @@ Request ScenarioControl::createRequest()
 
     Request newRequest = Request(requestID, description, priority, status, dateOfRequest, productID, customerName, releaseID);
     std::cout << "Request created successfully!" << std::endl;
+
+    Request::writeRequest(newRequest);
+
+    Request readReq;
+
+    Request::getNext(readReq, 0);
+
+    std::cout << readReq.getCustomerName() << std::endl;
+
     return newRequest;
 }
 

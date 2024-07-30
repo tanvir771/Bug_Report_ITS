@@ -20,7 +20,9 @@ std::ofstream Product::fout;
 std::fstream Product::fin;
 
 // Default constructor
-Product::Product() : productID(0), name(""), isAnticipatedRelease(false) {}
+Product::Product() : productID(0), isAnticipatedRelease(false) {
+    
+}
 
 // Parameterized constructor
 Product::Product(int productID, Release& release, const std::string &name, const std::string &releaseDate)
