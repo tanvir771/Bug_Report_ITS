@@ -233,6 +233,7 @@ Request ScenarioControl::createRequest()
     std::cout << "Enter Customer Name: ";
     std::getline(std::cin, customerName);
 
+    // TODO: product should already have an associated release ID
     std::cout << "Enter Release ID: ";
     std::cin >> releaseID;
 

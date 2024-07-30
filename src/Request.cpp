@@ -22,6 +22,7 @@ std::fstream Request::fin;
 int Request::requestIDCount = 0;
 
 // Constructors
+// Request ID set to zero - represents an empty object
 Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
     // each working with attributes - eg. description refers to this->description
     std::memset(description, 0, sizeof(description));
@@ -29,20 +30,18 @@ Request::Request() : changeRequestID(0), productID(0), releaseID(-1) {
     std::memset(priority, 0, sizeof(priority));
     std::memset(dateOfRequest, 0, sizeof(dateOfRequest));
     std::memset(customerName, 0, sizeof(customerName));
-    requestIDCount++;
 }
 
 Request::Request(int changeRequestID, const std::string& description, const std::string& priority, 
                  const std::string& status, const std::string& dateOfRequest, int productID, 
                  const std::string& customerName, int releaseID)
-    : changeRequestID(changeRequestID), productID(productID), releaseID(releaseID) {
+    : changeRequestID(++requestIDCount), productID(productID), releaseID(releaseID) {
     // explicitly using this->description to avoid confusion with arguments
     std::strncpy(this->description, description.c_str(), sizeof(this->description) - 1);
     std::strncpy(this->status, status.c_str(), sizeof(this->status) - 1);
     std::strncpy(this->priority, priority.c_str(), sizeof(this->priority) - 1);
     std::strncpy(this->dateOfRequest, dateOfRequest.c_str(), sizeof(this->dateOfRequest) - 1);
     std::strncpy(this->customerName, customerName.c_str(), sizeof(this->customerName) - 1);
-    requestIDCount++;
 }
 
 // Getters

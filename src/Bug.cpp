@@ -19,16 +19,17 @@ std::fstream Bug::fin;
 int Bug::bugIDCount = 0;
 
 // Constructor - default
+// bugID set to zero - represents an empty object
 Bug::Bug() : bugID(0), productID(0), releaseID(0) {
     std::memset(description, 0, sizeof(description));
     std::memset(severity, 0, sizeof(severity));
     std::memset(status, 0, sizeof(status));
-    bugIDCount++;
 }
 
 // Parameterized constructor
+//TODO: we do not use bugID
 Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::string& stat, int productID, int releaseID)
-    : bugID(bugID), productID(productID), releaseID(releaseID) 
+    : bugID(++bugIDCount), productID(productID), releaseID(releaseID) 
 {
     std::strncpy(description, desc.c_str(), sizeof(description) - 1);
     std::strncpy(severity, sev.c_str(), sizeof(severity) - 1);
@@ -38,7 +39,7 @@ Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::
 
 // Getters
 int Bug::getBugID() const {
-    return bugIDCount;
+    return bugID;
 }
 
 std::string Bug::getDescription() const {
@@ -178,12 +179,12 @@ void Bug::seekToBeginningOfFile() {
 // @return - True if a record was successfully read, false if the end of the file was reached
 bool Bug::getNext(Bug& bugObject, int index) {
     if (!openReadFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat")) {
-        std::cout << "Could not open Request Read file" << std::endl;
+        std::cout << "Could not open Bug Read file" << std::endl;
         return false;
     }
 
     if (!Bug::fin.is_open()) {
-        std::cout << "Error opening file for Request read" << std::endl;
+        std::cout << "Error opening file for Bug read" << std::endl;
     }
 
     Bug::fin.seekg(index * sizeof(Bug), std::ios::beg);
@@ -196,13 +197,13 @@ bool Bug::getNext(Bug& bugObject, int index) {
     Bug::fin.read(reinterpret_cast<char*>(&bugObject), sizeof(Bug));
 
     if (Bug::fin.eof()) {
-        std::cout << "End of file reached prematurely (Request)" << std::endl;
+        std::cout << "End of file reached (Bug)" << std::endl;
         closeReadFile();
         return false;
     }
 
     if (Bug::fin.fail()) {
-        std::cout << "Error reading data from: request.dat" << std::endl;
+        std::cout << "Error reading data from: bug.dat" << std::endl;
         closeReadFile();
         return false;
     }
