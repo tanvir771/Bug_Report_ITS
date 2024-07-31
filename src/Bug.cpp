@@ -22,6 +22,7 @@ std::fstream Bug::tempFin;
 
 int Bug::bugIDCount = 0;
 
+//===============================================================================
 // Helper Printing Functions for Report Functions in Bug Class
 void printBugTableHeader() {
     std::cout << std::setw(10) << std::right << "Bug ID"
@@ -33,6 +34,7 @@ void printBugTableHeader() {
     std::cout << std::string(140, '-') << std::endl;
 }
 
+//===============================================================================
 void printBug(const Bug& bug) {
     std::cout << std::setw(10) << std::right << bug.getBugID()
         << std::setw(60) << std::right << bug.getDescription()
@@ -42,6 +44,7 @@ void printBug(const Bug& bug) {
         << std::setw(15) << std::right << bug.getReleaseID() << std::endl;
 }
 
+//===============================================================================
 // Constructor - default
 // bugID set to zero - represents an empty object
 Bug::Bug() : bugID(0), productID(0), releaseID(0) {
@@ -50,7 +53,13 @@ Bug::Bug() : bugID(0), productID(0), releaseID(0) {
     std::memset(status, 0, sizeof(status));
 }
 
-// Parameterized constructor
+//===============================================================================
+// Parameterized constructor initializes a Bug object with specific details
+// @param bugID - The ID of the bug
+// @param description - Description of the bug
+// @param severity - Severity of the bug
+// @param status - Status of the bug
+// @param productReleaseID - ID of the related product release
 Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::string& stat, int productID, int releaseID)
     : bugID(++bugIDCount), productID(productID), releaseID(releaseID) 
 {
@@ -60,50 +69,85 @@ Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::
     bugIDCount++;
 }
 
+//===============================================================================
 // Getters
+// Gets the bug ID
+// @return - returns the associated integer bug ID
 int Bug::getBugID() const {
     return bugID;
 }
 
+//===============================================================================
+// Gets the description of the bug
+// @return - returns the associated string description
 std::string Bug::getDescription() const {
     return description;
 }
 
+//===============================================================================
+// Gets the severity of the bug
+// @return - returns the associated string severity
 std::string Bug::getSeverity() const {
     return severity;
 }
 
+//===============================================================================
+// Gets the status of the bug
+// @return - returns the associated string status
 std::string Bug::getStatus() const {
     return status;
 }
 
+//===============================================================================
+// Gets the product ID related to the bug
+// @return - returns the associated integer product ID
 int Bug::getProductID() const {
     return productID;
 }
 
+//===============================================================================
+// Gets the release ID related to the Bug's Product
+// @return - returns the associated integer releaseID
 int Bug::getReleaseID() const
 {
     return releaseID;
 }
 
-// Setters
+//===============================================================================
+// Setters - no const promise because they change attributes
+
+// Sets the bug ID
+// @param bugID - The bug ID to set
+// @return - returns true if successful, false otherwise
 bool Bug::setBugID(int bugID) {
     this->bugIDCount = bugID;
     return true;
 }
 
+//===============================================================================
+// Sets the product ID
+// @param product ID - The product ID to set
+// @return - returns true if successful, false otherwise
 bool Bug::setProductID(int productID)
 {
     this->productID = productID;
     return true;
 }
 
+//===============================================================================
+// Sets the release ID
+// @param release ID - The product ID to set
+// @return - returns true if successful, false otherwise
 bool Bug::setReleaseID(int releaseID)
 {
     this->releaseID = releaseID;
     return true;
 }
 
+//===============================================================================
+// Sets the description of the bug
+// @param description - The description to set
+// @return - returns true if successful, false otherwise
 bool Bug::setDescription(const std::string& description) {
     if (description.size() >= sizeof(this->description)) {
         return false;
@@ -113,6 +157,10 @@ bool Bug::setDescription(const std::string& description) {
     return true;
 }
 
+//===============================================================================
+// Sets the severity of the bug
+// @param severity - The severity to set
+// @return - returns true if successful, false otherwise
 bool Bug::setSeverity(const std::string& severity) {
     if (severity.size() >= sizeof(this->severity)) {
         return false; // Input string too long
@@ -122,6 +170,10 @@ bool Bug::setSeverity(const std::string& severity) {
     return true;
 }
 
+//===============================================================================
+// Sets the status of the bug
+// @param status - The status to set
+// @return - returns true if successful, false otherwise
 bool Bug::setStatus(const std::string& status) {
     if (status.size() >= sizeof(this->status)) {
         return false; // Input string too long
@@ -131,8 +183,12 @@ bool Bug::setStatus(const std::string& status) {
     return true;
 }
 
-
+//===============================================================================
 // File operations
+
+// Opens the file for reading and writing
+// @param filename - The name of the file to open
+// @return True if the file was successfully opened, false otherwise
 bool Bug::openWriteFile(const std::string& fileName) {
     Bug::fileName = fileName;
     Bug::fout.clear();
@@ -141,6 +197,10 @@ bool Bug::openWriteFile(const std::string& fileName) {
     return Bug::fout.is_open();
 }
 
+//===============================================================================
+// Opens the file for reading
+// @param fileName - The name of the file to open
+// @return True if the file was successfully opened, false otherwise
 bool Bug::openReadFile(const std::string& fileName)
 {
     Bug::fileName = fileName;
@@ -149,13 +209,16 @@ bool Bug::openReadFile(const std::string& fileName)
     return Bug::fin.is_open();
 }
 
-
+//===============================================================================
+// Closes the currently open file
 void Bug::closeWriteFile() {
     if (Bug::fout.is_open()) {
         Bug::fout.close();
     }
 }
 
+//===============================================================================
+// Closes the currently open file
 void Bug::closeReadFile()
 {
     if (Bug::fin.is_open()) {
@@ -163,7 +226,10 @@ void Bug::closeReadFile()
     }
 }
 
-
+//===============================================================================
+// Writes a Bug object to the file
+// @param bugObject - The Bug object to write
+// @return - True if the write operation was successful, false otherwise
 // Expectations: opens the files and closes the file after writing
 bool Bug::writeBug(Bug& bugObject) {
     if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat")) {
@@ -192,13 +258,15 @@ bool Bug::writeBug(Bug& bugObject) {
     return true;
 }
 
+//===============================================================================
+// Moves the file cursor to the beginning of the file
 void Bug::seekToBeginningOfFile() {
     if (Bug::fin.is_open()) {
         Bug::fin.seekg(0, std::ios::beg);
     }
 }
 
-
+//===============================================================================
 // Reads the next Bug object from the file
 // @param bugObject - The Bug object to fill with data from the file
 // @param index - Starting at 0, it indicates which Bug item to retrieve
@@ -238,6 +306,10 @@ bool Bug::getNext(Bug& bugObject, int index) {
     return true;
 }
 
+//===============================================================================
+// Deletes a specific Bug record from the file
+// @param bugID - The ID of the bug to delete
+// @return - True if the record was successfully deleted, false otherwise
 bool Bug::deleteBugRecord(int bugID) {
     // Open the main file for reading
     std::string tempFilename = "E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/temp.dat";
@@ -287,6 +359,11 @@ bool Bug::deleteBugRecord(int bugID) {
     return true;
 }
 
+//===============================================================================
+// Finds a specific Bug record in the file
+// @param bugID - The ID of the bug to find
+// @param bugObject - The Bug object to fill with data if found
+// @return - True if the record was found, false otherwise
 Bug Bug::findBugRecord(int bugID) {
     Bug bugObj;
     int num = 0;
@@ -300,6 +377,10 @@ Bug Bug::findBugRecord(int bugID) {
     return Bug(0,"","","", 0, 0);
 }
 
+//===============================================================================
+// Finds specific Bugs record in the file by productID
+// @param productID - Product ID associated with the bug to find
+// @return - None (void) - prints all bugs to console
 void Bug::printBugsByProduct(int productID)
 {
     Bug bugObj;
@@ -314,6 +395,10 @@ void Bug::printBugsByProduct(int productID)
     }
 }
 
+//===============================================================================
+// Finds specific Bugs record in the file by severity
+// @param severity - String representing the severity of the bug
+// @return - None (void) - prints all bugs to console
 void Bug::printBugsBySeverity(std::string severity)
 {
     Bug bugObj;
@@ -328,6 +413,10 @@ void Bug::printBugsBySeverity(std::string severity)
     }
 }
 
+//===============================================================================
+// Finds specific Bugs record in the file by status
+// @param status - String representing the status of the bug
+// @return - None (void) - prints all bugs to console
 void Bug::printBugsByStatus(std::string status)
 {
     Bug bugObj;
@@ -342,6 +431,7 @@ void Bug::printBugsByStatus(std::string status)
     }
 }
 
+//===============================================================================
 // Static method to read the last ID from a file
 void Bug::readLastID() {
     std::ifstream fin("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::binary);
@@ -351,6 +441,7 @@ void Bug::readLastID() {
     }
 }
 
+//===============================================================================
 // Static method to write the current ID to a file
 void Bug::writeLastID() {
     std::ofstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);

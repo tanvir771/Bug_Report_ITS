@@ -16,6 +16,9 @@ std::string Customer::fileName = "bug_default.dat";  // You can set a default fi
 std::ofstream Customer::fout;
 std::fstream Customer::fin;
 
+//===============================================================================
+// Constructor
+// Default Constructor
 Customer::Customer() : isEmployee(false)
 {
     // referring to attributes - eg. this->version
@@ -25,7 +28,11 @@ Customer::Customer() : isEmployee(false)
     std::memset(department, 0, sizeof(department));
 }
 
-// Constructor - parameterized
+//===============================================================================
+// Parameterized Constructor - initializes Customer instance with given parameters
+// @param name - Name of Customer (taken by reference)
+// @param phone - Phone number of Customer (taken by reference)
+// @param email - Email address of Customer (taken by reference)
 Customer::Customer(const std::string &name, const std::string &phone, const std::string &email)
     : isEmployee(false) {
     // explicitly using this->description to avoid confusion with arguments
@@ -35,28 +42,49 @@ Customer::Customer(const std::string &name, const std::string &phone, const std:
     std::memset(department, 0, sizeof(department));         // Initially empty; have to set up manually
 }
 
-// Getters
+//===============================================================================
+// Getters - all const as they do not change anything
+
+// Gets Customer name of a particular instance
+// @return - returns associated string of Customer name 
 std::string Customer::getCustomerName() const {
     return customerName;
 }
 
+//===============================================================================
+// Gets Customer phone number of a particular instance
+// @return - returns associated string of Customer phone number 
 std::string Customer::getPhone() const {
     return phone;
 }
 
+//===============================================================================
+// Gets Customer email address of a particular instance
+// @return - returns associated string of Customer email address 
 std::string Customer::getEmail() const {
     return email;
 }
 
+//===============================================================================
+// Gets whether the Customer is an employee
+// @return - returns true if the Customer is an employee, false otherwise
 bool Customer::getIsEmployee() const {
     return isEmployee;
 }
 
+//===============================================================================
+// Gets the department of the Customer if they are an employee
+// @return - returns associated string of Customer department, empty if not an employee
 std::string Customer::getDepartment() const {
     return isEmployee ? department : "";
 }
 
-// Setters
+//===============================================================================
+// Setters - no const promise because they change attributes
+
+// Sets Customer name of a particular instance
+// @param name - Name of Customer (taken by reference)
+// @return - returns true if successful, false otherwise
 bool Customer::setCustomerName(const std::string& name) {
     if (name.size() >= sizeof(this->customerName)) {
         return false; // Input string too long
@@ -66,6 +94,10 @@ bool Customer::setCustomerName(const std::string& name) {
     return true;
 }
 
+//===============================================================================
+// Sets Customer phone number of a particular instance
+// @param phone - Phone number of Customer (taken by reference)
+// @return - returns true if successful, false otherwise
 bool Customer::setPhone(const std::string& phone) {
     if (phone.size() >= sizeof(this->phone)) {
         return false; // Input string too long
@@ -75,6 +107,10 @@ bool Customer::setPhone(const std::string& phone) {
     return true;
 }
 
+//===============================================================================
+// Sets Customer email address of a particular instance
+// @param email - Email address of Customer (taken by reference)
+// @return - returns true if successful, false otherwise
 bool Customer::setEmail(const std::string& email) {
     if (email.size() >= sizeof(this->email)) {
         return false; // Input string too long
@@ -84,6 +120,10 @@ bool Customer::setEmail(const std::string& email) {
     return true;
 }
 
+//===============================================================================
+// Sets whether the Customer is an employee
+// @param isEmployee - Boolean indicating if the Customer is an employee
+// @return - returns true if successful, false otherwise
 bool Customer::setIsEmployee(bool isEmployee) {
     this->isEmployee = isEmployee;
     if (!isEmployee) {
@@ -92,6 +132,11 @@ bool Customer::setIsEmployee(bool isEmployee) {
     return true;
 }
 
+//===============================================================================
+// Sets the department of the Customer if they are an employee
+// Preconditions: Customer has to be an employee!
+// @param department - Department of Customer (taken by reference)
+// @return - returns true if successful, false otherwise
 bool Customer::setDepartment(const std::string& department) {
     if (isEmployee) {
         if (department.size() >= sizeof(this->department)) {
@@ -104,8 +149,12 @@ bool Customer::setDepartment(const std::string& department) {
     return false;
 }
 
-// File Operations
+//===============================================================================
+// File operations
 
+// Opens the file for writing
+// @param filename - The name of the file to open
+// @return True if the file was successfully opened, false otherwise
 bool Customer::openWriteFile(const std::string& fileName) {
     Customer::fileName = fileName;
     Customer::fout.clear();
@@ -114,6 +163,10 @@ bool Customer::openWriteFile(const std::string& fileName) {
     return Customer::fout.is_open();
 }
 
+//===============================================================================
+// Opens the file for reading
+// @param fileName - The name of the file to open
+// @return True if the file was successfully opened, false otherwise
 bool Customer::openReadFile(const std::string& fileName)
 {
     Customer::fileName = fileName;
@@ -122,13 +175,16 @@ bool Customer::openReadFile(const std::string& fileName)
     return Customer::fin.is_open();
 }
 
-
+//===============================================================================
+// Closes the currently open file
 void Customer::closeWriteFile() {
     if (Customer::fout.is_open()) {
         Customer::fout.close();
     }
 }
 
+//===============================================================================
+// Closes the currently open file
 void Customer::closeReadFile()
 {
     if (Customer::fin.is_open()) {
@@ -136,7 +192,10 @@ void Customer::closeReadFile()
     }
 }
 
-
+//===============================================================================
+// Writes a Customer object to the file
+// @param - customerObject - The Customer object to write
+// @return - True if the write operation was successful, false otherwise
 // Expectations: opens the files and closes the file after writing
 bool Customer::writeCustomer(Customer& customerObject) {
     if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/customer.dat")) {
@@ -162,13 +221,18 @@ bool Customer::writeCustomer(Customer& customerObject) {
     return true;
 }
 
+//===============================================================================
+// Moves the file cursor to the beginning of the file
 void Customer::seekToBeginningOfFile() {
     if (Customer::fin.is_open()) {
         Customer::fin.seekg(0, std::ios::beg);
     }
 }
 
-
+//===============================================================================
+// Reads the next Customer object from the file
+// @param customerObject - The Customer object to fill with data from the file
+// @return - True if a record was successfully read, false if the end of the file was reached
 bool Customer::getNext(Customer& customerObject, int index) {
     if (!openReadFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/customer.dat")) {
         std::cout << "Could not open Customer Read file" << std::endl;
@@ -204,12 +268,20 @@ bool Customer::getNext(Customer& customerObject, int index) {
     return true;
 }
 
+//===============================================================================
+// Deletes a specific Customer record from the file
+// @param customerName - The name of the Customer to delete
+// @return - True if the record was successfully deleted, false otherwise
 bool Customer::deleteCustomerRecord(std::string customerName) {
     // This would be more complex in a real system, involving marking a record as deleted
     // or re-writing the file without the deleted record
     return false; // Placeholder implementation
 }
 
+//===============================================================================
+// Finds a specific Customer record in the file
+// @param customerName - The Name of the release to find
+// @return customerObject - The object with data if found; otherwise empty Object (customerName = "")
 Customer Customer::findCustomerRecord(std::string customerName) {
     Customer customerObj;
     int num = 0;

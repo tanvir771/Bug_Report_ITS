@@ -12,7 +12,7 @@
 #include "Customer.h"
 #include "Request.h"
 
-
+//===============================================================================
 // Helper Printing Functions
 void printCustomerTableHeader() {
     std::cout << std::setw(20) << std::right << "Name"
@@ -23,6 +23,7 @@ void printCustomerTableHeader() {
     std::cout << std::string(110, '-') << std::endl;
 }
 
+//===============================================================================
 void printCustomer(const Customer& customer) {
     std::cout << std::setw(20) << std::right << customer.getCustomerName()
         << std::setw(30) << std::right << customer.getEmail()
@@ -32,6 +33,7 @@ void printCustomer(const Customer& customer) {
         << std::endl;
 }
 
+//===============================================================================
 void printProductTableHeader() {
     std::cout << std::setw(15) << std::right << "Product ID"
         << std::setw(40) << std::right << "Name"
@@ -40,6 +42,7 @@ void printProductTableHeader() {
     std::cout << std::string(120, '-') << std::endl;
 }
 
+//===============================================================================
 void printProduct(const Product& product) {
     std::cout << std::setw(15) << std::right << product.getProductID()
         << std::setw(40) << std::right << product.getName()
@@ -47,6 +50,7 @@ void printProduct(const Product& product) {
         << std::setw(25) << std::right << (product.getIsAnticipatedRelease() ? "Yes" : "No") << std::endl;
 }
 
+//===============================================================================
 void printReleaseTableHeader() {
     std::cout << std::setw(15) << std::right << "Release ID"
         << std::setw(15) << std::right << "Product ID"
@@ -55,23 +59,31 @@ void printReleaseTableHeader() {
     std::cout << std::string(90, '-') << std::endl;
 }
 
+//===============================================================================
 void printRelease(const Release& release) {
     std::cout << std::setw(15) << std::right << release.getReleaseID()
         << std::setw(15) << std::right << release.getProductID()
         << std::setw(30) << std::right << release.getVersion()
         << std::setw(30) << std::right << release.getReleaseDate() << std::endl;
 }
+
+//===============================================================================
 // Constructor
 ScenarioControl::ScenarioControl()
 {
-    // looks unncessary
     bug = Bug();
     product = Product();
     customer = Customer();
     request = Request();
 }
 
+//===============================================================================
 // Product operations
+// @brief Creates a new Product object and adds it to the product list.
+// @param productID The ID of the product.
+// @param name The name of the product.
+// @param version The version of the product.
+// @return Product The created Product object.
 Product ScenarioControl::createProduct()
 {
     int releaseID;
@@ -166,7 +178,14 @@ Product ScenarioControl::createProduct()
     return newProduct;
 }
 
+//===============================================================================
 // Bug operations
+// @brief Creates a new Bug object and adds it to the Bug file
+// @param bugID The ID of the bug.
+// @param description The description of the bug.
+// @param severity The severity of the bug.
+// @param status The status of the bug.
+// @return Bug The created Bug object.
 Bug ScenarioControl::createBug()
 {
     std::string description;
@@ -222,6 +241,10 @@ Bug ScenarioControl::createBug()
     return newBug;
 }
 
+//===============================================================================
+// @brief Creates a new Bug object from a Request object and writes it to Bug file
+// @param reqObj - Request Object containing all information for a Bug
+// @return Bug The created Bug object.
 Bug ScenarioControl::createBugFromRequest(Request& reqObj)
 {
     Bug newBug = Bug(Bug::bugIDCount, reqObj.getDescription(), reqObj.getPriority(), reqObj.getStatus(), reqObj.getProductID(), reqObj.getReleaseID());
@@ -229,6 +252,10 @@ Bug ScenarioControl::createBugFromRequest(Request& reqObj)
     return newBug;
 }
 
+//===============================================================================
+// @brief Deletes a Bug object from the bug list by ID.
+// @param bugID The ID of the bug to delete.
+// @return bool True if the bug was found and deleted, false otherwise.
 bool ScenarioControl::deleteBug()
 {
     int bugID;
@@ -241,7 +268,13 @@ bool ScenarioControl::deleteBug()
     return true;
 }
 
+//===============================================================================
 // Customer operations
+// @brief Creates a new Customer object and adds it to the customer list.
+// @param customerID The ID of the customer.
+// @param name The name of the customer.
+// @param contactInfo The contact information of the customer.
+// @return Customer The created Customer object.
 Customer ScenarioControl::createCustomer()
 {
     std::string name;
@@ -288,6 +321,10 @@ Customer ScenarioControl::createCustomer()
     return Customer();
 }
 
+//===============================================================================
+// @brief Deletes a Customer object from the customer list by ID.
+// @param customerID The ID of the customer to delete.
+// @return bool True if the customer was found and deleted, false otherwise.
 bool ScenarioControl::deleteCustomer()
 {
     std::string name;
@@ -299,7 +336,10 @@ bool ScenarioControl::deleteCustomer()
     return false;
 }
 
+//===============================================================================
 // Request operations
+// @brief Creates a new Request object and adds it to the request list.
+// @return Request The created Request object.
 Request ScenarioControl::createRequest()
 {
     std::string description;
@@ -398,6 +438,9 @@ Request ScenarioControl::createRequest()
     return newRequest;
 }
 
+//===============================================================================
+// @brief Deletes a Request object from the request list by ID.
+// @return bool True if the request was found and deleted, false otherwise.
 bool ScenarioControl::deleteRequest()
 {
     int requestID;
@@ -409,6 +452,9 @@ bool ScenarioControl::deleteRequest()
     return request.deleteRequestRecord(requestID);;
 }
 
+//===============================================================================
+// @brief Modifies a Request Object from file
+// @return bool True if the request was modified, false otherwise.
 bool ScenarioControl::modifyRequest()
 {
     int requestID;
@@ -534,7 +580,10 @@ bool ScenarioControl::modifyRequest()
     return true;
 }
 
-// Private helper functions to find objects by ID
+//===============================================================================
+// Private helper function to find objects by ID
+// @brief Finds a Product object by ID.
+// @return Product// Pointer to the found Product object, or nullptr if not found.
 Product ScenarioControl::findProduct()
 {
     int productID;
@@ -554,6 +603,9 @@ Product ScenarioControl::findProduct()
     return tempProduct;
 }
 
+//===============================================================================
+// @brief Modifies Bug by ID
+// @return Return Bug of the modified Bug.
 Bug ScenarioControl::modifyBug()
 {
     int bugID;
@@ -658,6 +710,9 @@ Bug ScenarioControl::modifyBug()
     return bug;
 }
 
+//===============================================================================
+// @brief Finds a Customer object.
+// @return Request Object found.
 Customer ScenarioControl::findCustomer()
 {
     std::cin.ignore();
@@ -683,7 +738,9 @@ Customer ScenarioControl::findCustomer()
     return tempCustomer;
 }
 
-
+//===============================================================================
+// @brief Finds a Request object.
+// @return Request Object found.
 Request ScenarioControl::findRequest()
 {
     int requestID;
@@ -694,6 +751,9 @@ Request ScenarioControl::findRequest()
     return request.findRequestRecord(requestID);
 }
 
+//===============================================================================
+// Reports bugs by Product ID
+// Prints all Bugs associated to console
 void ScenarioControl::report1()
 {
     int productID;
@@ -705,6 +765,9 @@ void ScenarioControl::report1()
     Bug::printBugsByProduct(productID);
 }
 
+//===============================================================================
+// Reports bugs by severity
+// Prints all Bugs associated to console
 void ScenarioControl::report2()
 {
     std::string severity;
@@ -716,6 +779,9 @@ void ScenarioControl::report2()
     Bug::printBugsBySeverity(severity);
 }
 
+//===============================================================================
+// Reports bugs by severity
+// Prints all Bugs associated to console
 void ScenarioControl::report3()
 {
     std::string status;
@@ -727,6 +793,8 @@ void ScenarioControl::report3()
     Bug::printBugsByStatus(status);
 }
 
+//===============================================================================
+// Prints all Products
 void ScenarioControl::printProducts()
 {
     Product::printAllProducts();
