@@ -17,6 +17,9 @@ std::string Bug::fileName = "bug_default.dat";  // You can set a default filenam
 std::ofstream Bug::fout;
 std::fstream Bug::fin;
 
+std::ofstream Bug::tempFout;
+std::fstream Bug::tempFin;
+
 int Bug::bugIDCount = 0;
 
 // Helper Printing Functions for Report Functions in Bug Class
@@ -183,6 +186,9 @@ bool Bug::writeBug(Bug& bugObject) {
 
     closeWriteFile();
     std::cout << "Data written to Bug file successfully." << std::endl;
+
+    writeLastID();      // Save last ID to separate file for later use
+
     return true;
 }
 
@@ -233,33 +239,53 @@ bool Bug::getNext(Bug& bugObject, int index) {
 }
 
 bool Bug::deleteBugRecord(int bugID) {
-    int num = 1;
-    if (Bug::fin.is_open()) {
-        std::fstream tempFile("temp.dat", std::ios::out | std::ios::binary);
-        Bug tempBug;
-        bool found = false;
+    // Open the main file for reading
+    std::string tempFilename = "E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/temp.dat";
+    Bug::tempFout.clear();
+    Bug::tempFout.flush();
+    Bug::tempFout.open(tempFilename, std::ios::out | std::ios::binary | std::ios::app);
 
-        seekToBeginningOfFile();
-        while (getNext(tempBug, num)) {
-            if (tempBug.getBugID() != bugID) {
-                tempFile.write(reinterpret_cast<const char*>(&tempBug), sizeof(Bug));
-            }
-            else {
-                found = true;
-            }
-            num++;
-        }
-
-        Bug::fin.close();
-        tempFile.close();
-
-        remove(fileName.c_str());
-        rename("temp.dat", fileName.c_str());
-
-        openWriteFile(fileName);
-        return found;
+    if (!tempFout.is_open()) {
+        std::cout << "Problem loading file" << std::endl;
+        closeReadFile();
+        return false;
     }
-    return false;
+
+    Bug tempBug;
+    int index = 0;
+    bool found = true;
+
+    seekToBeginningOfFile();
+    while (getNext(tempBug, index)) {
+        if (tempBug.getBugID() != bugID) {
+            tempFout.write(reinterpret_cast<char*>(&tempBug), sizeof(Bug));
+        }
+        else {
+            found = true;
+        }
+        index++;
+    }
+
+    closeReadFile();
+    tempFout.close();
+
+    // Replace the original file with the temporary file if a record was found
+    if (found) {
+        if (remove("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat") != 0) {
+            std::cerr << "Error deleting original file" << std::endl;
+            return false;
+        }
+        if (rename("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/temp.dat", "E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat") != 0) {
+            std::cerr << "Error renaming temporary file" << std::endl;
+            return false;
+        }
+    }
+    else {
+        std::cout << "Bug ID not found, no record deleted" << std::endl;
+        remove("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/temp.dat");
+    }
+    std::cout << "Bug " << bugID << " deleted!" << std::endl;
+    return true;
 }
 
 Bug Bug::findBugRecord(int bugID) {
@@ -272,7 +298,7 @@ Bug Bug::findBugRecord(int bugID) {
         }
         num++;
     }
-    return bugObj;
+    return Bug(0,"","","", 0, 0);
 }
 
 void Bug::printBugsByProduct(int productID)
@@ -289,18 +315,48 @@ void Bug::printBugsByProduct(int productID)
     }
 }
 
-void Bug::printBugsBySeverity(std::string serverity)
+void Bug::printBugsBySeverity(std::string severity)
 {
     Bug bugObj;
     seekToBeginningOfFile();
     int num = 0;
     printBugTableHeader();
     while (getNext(bugObj, num)) {
-        if (bugObj.getSeverity() == serverity) {
+        if (bugObj.getSeverity() == severity) {
             printBug(bugObj);
         }
         num++;
     }
 }
 
+void Bug::printBugsByStatus(std::string status)
+{
+    Bug bugObj;
+    seekToBeginningOfFile();
+    int num = 0;
+    printBugTableHeader();
+    while (getNext(bugObj, num)) {
+        if (bugObj.getStatus() == status) {
+            printBug(bugObj);
+        }
+        num++;
+    }
+}
 
+// Static method to read the last ID from a file
+void Bug::readLastID() {
+    std::ifstream fin("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::binary);
+    if (fin.is_open()) {
+        fin.read(reinterpret_cast<char*>(&bugIDCount), sizeof(bugIDCount));
+        fin.close();
+    }
+}
+
+// Static method to write the current ID to a file
+void Bug::writeLastID() {
+    std::ofstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);
+    if (fout.is_open()) {
+        fout.write(reinterpret_cast<const char*>(&bugIDCount), sizeof(bugIDCount));
+        fout.close();
+    }
+}

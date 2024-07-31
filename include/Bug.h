@@ -133,10 +133,21 @@ public:
     // @return - None (void) - prints all bugs to console
     static void printBugsByProduct(int productID);
 
-    // Finds specific Bugs record in the file by serverity
-    // @param serverity - String representing the serverity of the bug
+    // Finds specific Bugs record in the file by severity
+    // @param severity - String representing the severity of the bug
     // @return - None (void) - prints all bugs to console
-    static void printBugsBySeverity(std::string serverity);
+    static void printBugsBySeverity(std::string severity);
+
+    // Finds specific Bugs record in the file by status
+    // @param status - String representing the status of the bug
+    // @return - None (void) - prints all bugs to console
+    static void Bug::printBugsByStatus(std::string status);
+
+    // Saves the last ID
+    static void Bug::readLastID();
+
+    // Reads the last ID
+    static void Bug::writeLastID();
 
     static int bugIDCount; // Keeps tracks of the bug ID 
 
@@ -152,5 +163,8 @@ private:
 
     static std::ofstream fout;    // stream for writing to files
     static std::fstream fin;      // stream for reading to files
+
+    static std::ofstream tempFout;    // Stream for writing to temporary file
+    static std::fstream tempFin;     // Stream for reading from temporary file
 };
 

@@ -50,6 +50,10 @@ int main() {
         std::cout << "Enter your choice (0-12): ";
         std::cin >> choice;
 
+        // Update the static IDs with Last ID count
+        Bug::readLastID();
+        Request::readLastID();
+
         switch (choice) {
         case 0:
             std::cout << "Exiting the program..." << std::endl;
@@ -100,7 +104,7 @@ int main() {
             break;
         case 12:
             std::cout << "You selected Report Bugs by Status" << std::endl;
-            // TODO: report bugs by status
+            control.report3();
             break;
         default:
             std::cout << "Invalid choice. Please select a valid option (1-5)." << std::endl;

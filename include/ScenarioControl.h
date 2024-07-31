@@ -130,6 +130,11 @@ public:
     // Reports bugs by severity
     // Prints all Bugs associated to console
     void report2();
+
+    // Reports bugs by severity
+    // Prints all Bugs associated to console
+    void report3();
+
 private:
     // Placeholder variable
     Product product;

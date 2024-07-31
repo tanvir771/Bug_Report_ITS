@@ -165,16 +165,10 @@ bool ScenarioControl::deleteProduct()
 // Bug operations
 Bug ScenarioControl::createBug()
 {
-    int bugID;
     std::string description;
     std::string severity;
     std::string status;
     int productID;
-    int releaseID;
-
-    std::cout << "Enter Bug ID: ";
-    std::cin >> bugID;  // TODO: ID needs to be static - we also might need to check if other bugs exist in file, and then start counting from there
-    std::cin.ignore(); // To ignore the newline character left by std::cin
 
     std::cout << "Enter Bug Description: ";
     std::getline(std::cin, description);
@@ -185,8 +179,23 @@ Bug ScenarioControl::createBug()
     std::cout << "Enter Bug Status: ";
     std::getline(std::cin, status);
 
-    std::cout << "Enter product ID: ";
-    std::cin >> productID;
+    while (true) {
+        std::cout << "Enter Product ID: ";
+        std::cin >> productID;
+
+        // Check if the input is valid
+        if (std::cin.fail()) {
+            // Clear the error flag
+            std::cin.clear();
+            // Ignore the invalid input
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+        }
+        else {
+            // If input is valid, break out of the loop
+            break;
+        }
+    }
 
     Product tempProduct = Product::findProductRecord(productID);
 
@@ -202,18 +211,9 @@ Bug ScenarioControl::createBug()
 
     }
 
-    std::cout << "Enter release ID: ";          // TODO: remove this, since a product already has an associated release
-    std::cin >> releaseID;
-
-    Bug newBug = Bug(bugID, description, severity, status, productID, releaseID);
+    Bug newBug = Bug(Bug::bugIDCount, description, severity, status, productID, tempProduct.getReleaseID());
 
     Bug::writeBug(newBug);
-
-    Bug readBug;
-
-    Bug::getNext(readBug, 0);
-
-    std::cout << readBug.getDescription() << std::endl;
 
     return newBug;
 }
@@ -320,9 +320,23 @@ Request ScenarioControl::createRequest()
     std::cout << "Enter Date of Request: ";
     std::getline(std::cin, dateOfRequest);
 
-    std::cout << "Enter Product ID: ";
-    std::cin >> productID;
-    std::cin.ignore();
+    while (true) {
+        std::cout << "Enter Product ID: ";
+        std::cin >> productID;
+
+        // Check if the input is valid
+        if (std::cin.fail()) {
+            // Clear the error flag
+            std::cin.clear();
+            // Ignore the invalid input
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+        }
+        else {
+            // If input is valid, break out of the loop
+            break;
+        }
+    }
 
     Product tempProduct = Product::findProductRecord(productID);
 
@@ -332,12 +346,13 @@ Request ScenarioControl::createRequest()
         createProduct();
     }
     else {
-        std::cout << "Found Product! ";
+        std::cout << "Found Product! " << std::endl;
         printProductTableHeader();
         printProduct(tempProduct);
 
     }
 
+    std::cin.ignore();
     std::cout << "Enter Customer Name: ";
     std::getline(std::cin, customerName); 
 
@@ -348,13 +363,15 @@ Request ScenarioControl::createRequest()
         createCustomer();
     }
     else {
-        std::cout << "Found it: " << tempCustomer.getPhone() << std::endl;
+        std::cout << "Found Customer: " << std::endl;
+        printCustomerTableHeader();
+        printCustomer(tempCustomer);
     }
 
     Request newRequest = Request(Request::requestIDCount, description, priority, status, dateOfRequest, productID, customerName, tempProduct.getReleaseID());
 
     Request::writeRequest(newRequest);
-    std::cout << "Request created successfully!" << std::endl;
+    std::cout << "Request created successfully! ID: " << Request::requestIDCount << std::endl;
 
 
     while (true) {
@@ -428,11 +445,28 @@ Bug ScenarioControl::modifyBug()
 {
     int bugID;
 
-    std::cout << "Enter Bug ID: ";
-    std::cin >> bugID;
-    std::cin.ignore();
-    // Function body not implemented
-    return Bug::findBugRecord(bugID);
+    while (true) {
+        std::cout << "Enter Bug ID: ";
+        std::cin >> bugID;
+
+        // Check if the input is valid
+        if (std::cin.fail()) {
+            // Clear the error flag
+            std::cin.clear();
+            // Ignore the invalid input
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+        }
+        else {
+            // If input is valid, break out of the loop
+            break;
+        }
+    }
+
+    Bug::deleteBugRecord(bugID);
+    Bug bug = createBug();
+
+    return bug;
 }
 
 Customer ScenarioControl::findCustomer()
@@ -479,18 +513,29 @@ void ScenarioControl::report1()
     std::cout << "Enter Product ID: ";
     std::cin >> productID;
     std::cin.ignore();
-    // Function body not implemented
+
     Bug::printBugsByProduct(productID);
 }
 
 void ScenarioControl::report2()
 {
-    // TODO: fix - reaches file end prematurely 
     std::string severity;
 
-    std::cout << "Enter Severity: ";
-    std::cin >> severity;
     std::cin.ignore();
+    std::cout << "Enter Severity: ";
+    std::getline(std::cin, severity);
     // Function body not implemented
     Bug::printBugsBySeverity(severity);
 }
+
+void ScenarioControl::report3()
+{
+    std::string status;
+
+    std::cin.ignore();
+    std::cout << "Enter Severity: ";
+    std::getline(std::cin, status);
+
+    Bug::printBugsByStatus(status);
+}
+

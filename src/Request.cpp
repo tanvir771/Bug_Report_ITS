@@ -190,6 +190,9 @@ bool Request::writeRequest(Request& requestObject) {
 
     closeWriteFile();
     std::cout << "Data written to Request file successfully." << std::endl;
+
+    writeLastID();      // save the most recent ID
+
     return true;
 }
 
@@ -270,10 +273,32 @@ Request Request::findRequestRecord(int changeRequestID) {
     }
     return requestObj;
 }
+// Static method to read the last request ID from a file
+void Request::readLastID() {
+    std::ifstream fin("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::binary);
+    if (fin.is_open()) {
+        // Skip the bug ID count bytes
+        fin.seekg(sizeof(int), std::ios::beg);
 
-//Bug Request::convertToBug() const {
-//    if (description.empty() || priority.empty() || status.empty() || productID == 0 || releaseID == -1) {
-//        throw std::invalid_argument("Insufficient information to convert Request to Bug");
-//    }
-//    return Bug(changeRequestID, description, priority, status, productID, releaseID);
-//}
+        // Read the request ID count
+        fin.read(reinterpret_cast<char*>(&requestIDCount), sizeof(requestIDCount));
+        fin.close();
+    }
+}
+
+// Static method to write the current request ID to a file
+void Request::writeLastID() {
+    std::fstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::out | std::ios::binary);
+    if (!fout.is_open()) {
+        fout.open("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);
+        fout.close();
+        fout.open("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::out | std::ios::binary);
+    }
+
+    // Skip the bug ID count bytes
+    fout.seekp(sizeof(int), std::ios::beg);
+
+    // Write the request ID count
+    fout.write(reinterpret_cast<const char*>(&requestIDCount), sizeof(requestIDCount));
+    fout.close();
+}

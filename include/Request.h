@@ -150,6 +150,12 @@ public:
     // @return - True if the record was found, false otherwise
     static Request findRequestRecord(int changeRequestID);
 
+    // Writes last ID to file
+    static void writeLastID();
+
+    // Reads last ID from file
+    static void readLastID();
+
     // TODO: make sure to change getters and setters to return this instead
     // Keeps track of Request ID
     static int requestIDCount;
