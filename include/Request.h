@@ -156,7 +156,6 @@ public:
     // Reads last ID from file
     static void readLastID();
 
-    // TODO: make sure to change getters and setters to return this instead
     // Keeps track of Request ID
     static int requestIDCount;
 

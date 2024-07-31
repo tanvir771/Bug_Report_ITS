@@ -171,7 +171,7 @@ bool Release::deleteReleaseRecord(int releaseID) {
 
 Release Release::findReleaseRecord(int releaseID) {
     Release releaseObj;
-    seekToBeginningOfFile();            // TODO: handle if no file create yet
+    seekToBeginningOfFile();
     int num = 0;
 
     // Loop over every item from file, checking to see if there is a matching Release ID

@@ -139,7 +139,7 @@ void Customer::closeReadFile()
 
 // Expectations: opens the files and closes the file after writing
 bool Customer::writeCustomer(Customer& customerObject) {
-    if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/customer.dat")) {       // TODO: Refractor path to static variable; path should also be relative
+    if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/customer.dat")) {
         std::cout << "Could not open Customer Write file" << std::endl;
         return false;
     }

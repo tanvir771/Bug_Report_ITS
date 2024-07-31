@@ -135,6 +135,9 @@ public:
     // Prints all Bugs associated to console
     void report3();
 
+    // Prints all Products
+    void printProducts();
+
 private:
     // Placeholder variable
     Product product;

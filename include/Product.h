@@ -102,16 +102,13 @@ public:
     // @return - True if a record was successfully read, false if the end of the file was reached
     static bool getNext(Product& productObject, int index);
 
-    // Deletes a specific Product record from the file
-    // @param productID - The ID of the release to delete
-    // @return - True if the record was successfully deleted, false otherwise
-    static bool deleteProductRecord(int productID);
-
     // Finds a specific Product record in the file
     // @param productID - The ID of the release to find
     // @param productObject - The Product object to fill with data if found
     // @return - True if the record was found, false otherwise
     static Product findProductRecord(int productID);
+
+    static void printAllProducts();
 
 private:
     int productID;

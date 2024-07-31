@@ -76,7 +76,7 @@ int main() {
             break;
         case 5:
             std::cout << "You selected Report all Products" << std::endl;
-            // TODO:  Report all Products
+            control.printProducts();
             break;
         case 6:
             std::cout << "You selected Create Product" << std::endl;

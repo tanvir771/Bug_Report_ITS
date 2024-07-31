@@ -105,7 +105,7 @@ Product ScenarioControl::createProduct()
         std::string tempVersion;
         std::string tempReleaseDate;
 
-        std::cout << "No Release ID found - create a new Release" << std::endl; // TODO: ask if they want to try again or create new Release object
+        std::cout << "No Release ID found - create a new Release" << std::endl;
         std::cout << "Enter Release ID: ";
         std::cin >> tempReleaseID;
         std::cin.ignore(); // To ignore the newline character left by std::cin
@@ -220,7 +220,6 @@ Bug ScenarioControl::createBug()
 
 Bug ScenarioControl::createBugFromRequest(Request& reqObj)
 {
-    // TODO: check to make sure that if removing getReleaseID then we remove it here too
     Bug newBug = Bug(Bug::bugIDCount, reqObj.getDescription(), reqObj.getPriority(), reqObj.getStatus(), reqObj.getProductID(), reqObj.getReleaseID());
     Bug::writeBug(newBug);
     return newBug;
@@ -234,7 +233,7 @@ bool ScenarioControl::deleteBug()
     std::cin.ignore(); // To ignore the newline character left by std::cin
 
     bug.deleteBugRecord(bugID);
-
+    std::cout << "Bug " << bugID << " deleted!" << std::endl;
     return true;
 }
 
@@ -407,7 +406,6 @@ bool ScenarioControl::deleteRequest()
     return request.deleteRequestRecord(requestID);;
 }
 
-// TODO: modify request and modify bug
 bool ScenarioControl::modifyRequest()
 {
     int requestID;
@@ -462,10 +460,86 @@ Bug ScenarioControl::modifyBug()
             break;
         }
     }
+    
+    Bug tempBug = Bug::findBugRecord(bugID);            // Make a copy
+    Bug::deleteBugRecord(bugID);                        // Delete the current one from Record 
 
-    Bug::deleteBugRecord(bugID);
-    Bug bug = createBug();
+    // Modify the current Bug (without ID)
 
+    std::string description;
+    std::string severity;
+    std::string status;
+    int productID;
+
+    bool done = false;
+    while (!done) {
+        
+        std::cout << "1. Description" << std::endl;
+        std::cout << "2. Severity" << std::endl;
+        std::cout << "3. Status" << std::endl;
+        std::cout << "4. Product ID" << std::endl;
+        std::cout << "5. Done" << std::endl;
+
+
+        int choice;
+        std::cout << "Select the attribute you want to change: ";
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the newline character from the input buffer
+
+        switch (choice) {
+            case 1: {
+                std::cout << "Enter new Description: ";
+                std::getline(std::cin, description);
+                tempBug.setDescription(description);
+                break;
+            }
+            case 2: {
+                std::cout << "Enter new Severity: ";
+                std::getline(std::cin, severity);
+                tempBug.setSeverity(severity);
+                break;
+            }
+            case 3: {
+                std::cout << "Enter new Status: ";
+                std::getline(std::cin, status);
+                tempBug.setStatus(status);
+                break;
+            }
+            case 4: {
+                int productID;
+                while (true) {
+                    std::cout << "Enter new Product ID: ";
+                    std::cin >> productID;
+
+                    // Check if the input is valid
+                    if (std::cin.fail()) {
+                        // Clear the error flag
+                        std::cin.clear();
+                        // Ignore the invalid input
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+                    }
+                    else {
+                        // If input is valid, break out of the loop
+                        tempBug.setProductID(productID);
+                        break;
+                    }
+                }
+                break;
+            }
+            case 5: {
+                done = true; // Exit the loop
+                std::cout << "Changes confirmed." << std::endl;
+                break;
+            }
+            default: {
+                std::cout << "Invalid choice. Please select again." << std::endl;;
+                break;
+            }
+        }
+    }
+
+    Bug::writeBug(tempBug);
     return bug;
 }
 
@@ -507,7 +581,6 @@ Request ScenarioControl::findRequest()
 
 void ScenarioControl::report1()
 {
-    // TODO: fix - reaches file end prematurely 
     int productID;
 
     std::cout << "Enter Product ID: ";
@@ -537,5 +610,10 @@ void ScenarioControl::report3()
     std::getline(std::cin, status);
 
     Bug::printBugsByStatus(status);
+}
+
+void ScenarioControl::printProducts()
+{
+    Product::printAllProducts();
 }
 

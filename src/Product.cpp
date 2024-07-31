@@ -19,6 +19,22 @@ std::string Product::fileName = "product_default.dat";  // set a default fileNam
 std::ofstream Product::fout;
 std::fstream Product::fin;
 
+// Helper Printing Functions
+void printTable() {
+    std::cout << std::setw(15) << std::right << "Product ID"
+        << std::setw(40) << std::right << "Name"
+        << std::setw(40) << std::right << "Release Date"
+        << std::setw(25) << std::right << "Is Anticipated Release" << std::endl;
+    std::cout << std::string(120, '-') << std::endl;
+}
+
+void printObj(const Product& product) {
+    std::cout << std::setw(15) << std::right << product.getProductID()
+        << std::setw(40) << std::right << product.getName()
+        << std::setw(40) << std::right << product.getReleaseDate() // Assuming you have a method to get release as a string
+        << std::setw(25) << std::right << (product.getIsAnticipatedRelease() ? "Yes" : "No") << std::endl;
+}
+
 // Default constructor
 Product::Product() : productID(0), isAnticipatedRelease(false) {
     // name is the attribute - explicit: this->name
@@ -190,37 +206,6 @@ bool Product::getNext(Product& productObject, int index) {
     return true;
 }
 
-// TODO: Delete probably does not work
-// Deletes a specific Product record from the file
-bool Product::deleteProductRecord(int productID) {
-    int num = 1;
-    if (Product::fin.is_open()) {
-        std::fstream tempFile("temp.dat", std::ios::out | std::ios::binary);
-        Product tempProduct;
-        bool found = false;
-
-        seekToBeginningOfFile();
-        while (getNext(tempProduct, num)) {
-            if (tempProduct.getProductID() != productID) {
-                tempFile.write(reinterpret_cast<const char*>(&tempProduct), sizeof(Product));
-            } else {
-                found = true;
-            }
-            num++;
-        }
-
-        Product::fin.close();
-        tempFile.close();
-
-        remove(fileName.c_str());
-        rename("temp.dat", fileName.c_str());
-
-        openWriteFile(fileName);
-        return found;
-    }
-    return false;
-}
-
 // Finds a specific Product record in the file
 // Returns nullptr if no Product Found
 Product Product::findProductRecord(int productID) {
@@ -234,4 +219,16 @@ Product Product::findProductRecord(int productID) {
         num++;
     }
     return Product();
+}
+
+void Product::printAllProducts()
+{
+    Product productObj;
+    seekToBeginningOfFile();
+    int num = 0;
+    printTable();
+    while (getNext(productObj, num)) {
+        printObj(productObj);
+        num++;
+    }
 }

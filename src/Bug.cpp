@@ -166,7 +166,7 @@ void Bug::closeReadFile()
 
 // Expectations: opens the files and closes the file after writing
 bool Bug::writeBug(Bug& bugObject) {
-    if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat")) {       // TODO: Refractor path to static variable; path should also be relative
+    if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/bug.dat")) {
         std::cout << "Could not open Bug Write file" << std::endl;
         return false;
     }
@@ -284,7 +284,6 @@ bool Bug::deleteBugRecord(int bugID) {
         std::cout << "Bug ID not found, no record deleted" << std::endl;
         remove("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/temp.dat");
     }
-    std::cout << "Bug " << bugID << " deleted!" << std::endl;
     return true;
 }
 
