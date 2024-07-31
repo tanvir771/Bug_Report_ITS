@@ -210,7 +210,6 @@ bool Customer::deleteCustomerRecord(std::string customerName) {
     return false; // Placeholder implementation
 }
 
-// 
 Customer Customer::findCustomerRecord(std::string customerName) {
     Customer customerObj;
     int num = 0;
@@ -221,5 +220,5 @@ Customer Customer::findCustomerRecord(std::string customerName) {
         }
         ++num;
     }
-    return Customer("", "", "");
+    return Customer("", "", "");    // Ensure everything is empty - allows for not found check
 }

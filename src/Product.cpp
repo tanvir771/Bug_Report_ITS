@@ -36,6 +36,13 @@ int Product::getProductID() const {
     return productID;
 }
 
+// Gets Release ID of a particular instance of Product
+// @return - returns associated integer Release ID 
+int Product::getReleaseID() const
+{
+    return productRelease.getReleaseID();
+}
+
 // Getter for Product name
 std::string Product::getName() const {
     return name;
@@ -220,14 +227,12 @@ bool Product::deleteProductRecord(int productID) {
 Product Product::findProductRecord(int productID) {
     Product productObj;
     int num = 0;
-    if (Product::fin.is_open()) {
-        seekToBeginningOfFile();
-        while (getNext(productObj, num)) {
-            if (productObj.getProductID() == productID) {
-                return productObj;
-            }
-            num++;
+    seekToBeginningOfFile();
+    while (getNext(productObj, num)) {
+        if (productObj.getProductID() == productID) {
+            return productObj;
         }
+        num++;
     }
     return Product();
 }

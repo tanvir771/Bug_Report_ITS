@@ -28,6 +28,10 @@ public:
     // Gets Product ID of a particular instance
     // @return - returns associated integer Product ID 
     int getProductID() const;
+
+    // Gets Release ID of a particular instance of Product
+    // @return - returns associated integer Release ID 
+    int getReleaseID() const;
     
     // Gets Product name of a particular instance
     // @return - returns associated string of Product name 
@@ -83,7 +87,6 @@ public:
 
     // Closes the currently open fstream file
     static void closeReadFile();
-
 
     // Writes a Product object to the file
     // @param - productObject - The Product object to write

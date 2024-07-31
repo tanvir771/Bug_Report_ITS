@@ -251,7 +251,6 @@ Request ScenarioControl::createRequest()
     std::string dateOfRequest;
     int productID;
     std::string customerName;
-    int releaseID;          // TODO: product should already have a release id associated with it
 
     std::cin.ignore();
 
@@ -298,13 +297,7 @@ Request ScenarioControl::createRequest()
         std::cout << "Found it: " << tempCustomer.getPhone() << std::endl;
     }
 
-
-    // TODO: product should already have an associated release ID
-    std::cout << "Enter Release ID: ";
-    std::cin >> releaseID;
-    std::cin.ignore();
-
-    Request newRequest = Request(Request::requestIDCount, description, priority, status, dateOfRequest, productID, customerName, releaseID);
+    Request newRequest = Request(Request::requestIDCount, description, priority, status, dateOfRequest, productID, customerName, tempProduct.getReleaseID());
 
     Request::writeRequest(newRequest);
     std::cout << "Request created successfully!" << std::endl;
@@ -345,7 +338,7 @@ bool ScenarioControl::deleteRequest()
     return true;
 }
 
-// TODO: modify request and modify bug - also need to have request turning into bug
+// TODO: modify request and modify bug
 bool ScenarioControl::modifyRequest()
 {
     int requestID;
@@ -367,7 +360,7 @@ Product ScenarioControl::findProduct()
     std::cout << "Enter Product ID: ";
     std::cin >> productID;
     std::cin.ignore();
-    // Function body not implemented
+
     Product tempProduct = product.findProductRecord(productID);
     if (tempProduct.getProductID() == 0) {
         std::cout << "No Product found that matches that ID!" << std::endl;
