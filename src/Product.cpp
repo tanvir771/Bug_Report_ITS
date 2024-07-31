@@ -229,5 +229,5 @@ Product Product::findProductRecord(int productID) {
             num++;
         }
     }
-    return productObj;
+    return Product();
 }

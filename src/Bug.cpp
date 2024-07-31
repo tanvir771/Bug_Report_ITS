@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <iomanip>
 #include "Bug.h"
 
 // Define and initialize the static member variables
@@ -17,6 +18,26 @@ std::ofstream Bug::fout;
 std::fstream Bug::fin;
 
 int Bug::bugIDCount = 0;
+
+// Helper Printing Functions for Report Functions in Bug Class
+void printBugTableHeader() {
+    std::cout << std::setw(10) << std::right << "Bug ID"
+        << std::setw(60) << std::right << "Description"
+        << std::setw(20) << std::right << "Severity"
+        << std::setw(20) << std::right << "Status"
+        << std::setw(15) << std::right << "Product ID"
+        << std::setw(15) << std::right << "Release ID" << std::endl;
+    std::cout << std::string(140, '-') << std::endl;
+}
+
+void printBug(const Bug& bug) {
+    std::cout << std::setw(10) << std::right << bug.getBugID()
+        << std::setw(60) << std::right << bug.getDescription()
+        << std::setw(20) << std::right << bug.getSeverity()
+        << std::setw(20) << std::right << bug.getStatus()
+        << std::setw(15) << std::right << bug.getProductID()
+        << std::setw(15) << std::right << bug.getReleaseID() << std::endl;
+}
 
 // Constructor - default
 // bugID set to zero - represents an empty object
@@ -260,10 +281,10 @@ void Bug::printBugsByProduct(int productID)
     Bug bugObj;
     seekToBeginningOfFile();
     int num = 0;
+    printBugTableHeader();
     while (getNext(bugObj, num)) {
         if (bugObj.getProductID() == productID) {
-            // TODO: First thing to work on : static count for bug not working
-            std::cout << bugObj.getBugID() << bugObj.getDescription() << std::endl;
+            printBug(bugObj);
         }
         num++;
     }
@@ -274,9 +295,10 @@ void Bug::printBugsBySeverity(std::string serverity)
     Bug bugObj;
     seekToBeginningOfFile();
     int num = 0;
+    printBugTableHeader();
     while (getNext(bugObj, num)) {
         if (bugObj.getSeverity() == serverity) {
-            std::cout << bugObj.getBugID() << bugObj.getDescription() << std::endl;
+            printBug(bugObj);
         }
         num++;
     }

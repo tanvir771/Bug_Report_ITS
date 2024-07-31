@@ -4,12 +4,47 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 #include "Product.h"
 #include "Bug.h"
 #include "Customer.h"
 #include "Request.h"
 
+
+// Helper Printing Functions
+void printCustomerTableHeader() {
+    std::cout << std::setw(20) << std::right << "Name"
+        << std::setw(30) << std::right << "Email"
+        << std::setw(20) << std::right << "Phone"
+        << std::setw(15) << std::right << "Is Employee"
+        << std::setw(25) << std::right << "Department" << std::endl;
+    std::cout << std::string(110, '-') << std::endl;
+}
+
+void printCustomer(const Customer& customer) {
+    std::cout << std::setw(20) << std::right << customer.getCustomerName()
+        << std::setw(30) << std::right << customer.getEmail()
+        << std::setw(20) << std::right << customer.getPhone()
+        << std::setw(15) << std::right << (customer.getIsEmployee() ? "Yes" : "No")
+        << std::setw(25) << std::right << (customer.getIsEmployee() ? customer.getDepartment() : "")
+        << std::endl;
+}
+
+void printProductTableHeader() {
+    std::cout << std::setw(15) << std::right << "Product ID"
+        << std::setw(40) << std::right << "Name"
+        << std::setw(40) << std::right << "Release Date"
+        << std::setw(25) << std::right << "Is Anticipated Release" << std::endl;
+    std::cout << std::string(120, '-') << std::endl;
+}
+
+void printProduct(const Product& product) {
+    std::cout << std::setw(15) << std::right << product.getProductID()
+        << std::setw(40) << std::right << product.getName()
+        << std::setw(40) << std::right << product.getReleaseDate() // Assuming you have a method to get release as a string
+        << std::setw(25) << std::right << (product.getIsAnticipatedRelease() ? "Yes" : "No") << std::endl;
+}
 
 // Constructor
 ScenarioControl::ScenarioControl()
@@ -123,6 +158,20 @@ Bug ScenarioControl::createBug()
     std::cout << "Enter product ID: ";
     std::cin >> productID;
 
+    Product tempProduct = Product::findProductRecord(productID);
+
+    if (tempProduct.getProductID() == 0) {
+        // no such product fonud
+        std::cout << "No Product matches that ID! Please create one" << std::endl;
+        createProduct();
+    }
+    else {
+        std::cout << "Found Product! ";
+        printProductTableHeader();
+        printProduct(tempProduct);
+
+    }
+
     std::cout << "Enter release ID: ";          // TODO: remove this, since a product already has an associated release
     std::cin >> releaseID;
 
@@ -222,6 +271,20 @@ Request ScenarioControl::createRequest()
     std::cin >> productID;
     std::cin.ignore();
 
+    Product tempProduct = Product::findProductRecord(productID);
+
+    if (tempProduct.getProductID() == 0) {
+        // no such product fonud
+        std::cout << "No Product matches that ID! Please create one" << std::endl;
+        createProduct();
+    }
+    else {
+        std::cout << "Found Product! ";
+        printProductTableHeader();
+        printProduct(tempProduct);
+
+    }
+
     std::cout << "Enter Customer Name: ";
     std::getline(std::cin, customerName); 
 
@@ -305,7 +368,15 @@ Product ScenarioControl::findProduct()
     std::cin >> productID;
     std::cin.ignore();
     // Function body not implemented
-    return product.findProductRecord(productID);
+    Product tempProduct = product.findProductRecord(productID);
+    if (tempProduct.getProductID() == 0) {
+        std::cout << "No Product found that matches that ID!" << std::endl;
+    } 
+    else {
+        printProductTableHeader();
+        printProduct(tempProduct);
+    }
+    return tempProduct;
 }
 
 Bug ScenarioControl::modifyBug()
@@ -321,12 +392,27 @@ Bug ScenarioControl::modifyBug()
 
 Customer ScenarioControl::findCustomer()
 {
+    std::cin.ignore();
     std::string customerName;
 
-    std::cout << "Enter Request Description: ";
+    std::cout << "Enter Customer Name: ";
     std::getline(std::cin, customerName);
 
-    return customer.findCustomerRecord(customerName);
+    Customer tempCustomer = customer.findCustomerRecord(customerName);
+
+    if (tempCustomer.getCustomerName() == "") {
+        // no such customer found
+        std::cout << "No Coustomer with that name found! " << std::endl;
+    }
+    else {
+        // Print header
+        printCustomerTableHeader();
+
+        // Print customer details
+        printCustomer(tempCustomer);
+    }
+
+    return tempCustomer;
 }
 
 
