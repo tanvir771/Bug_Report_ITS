@@ -148,7 +148,7 @@ bool Release::getNext(Release& releaseObject, int index) {
     Release::fin.read(reinterpret_cast<char*>(&releaseObject), sizeof(Release));
 
     if (Release::fin.eof()) {
-        std::cout << "End of file reached prematurely" << std::endl;
+        std::cout << "End of file reached" << std::endl;
         closeReadFile();
         return false;
     }
@@ -176,10 +176,11 @@ Release Release::findReleaseRecord(int releaseID) {
 
     // Loop over every item from file, checking to see if there is a matching Release ID
     while (getNext(releaseObj, num)) {
-        num++;
         if (releaseObj.getReleaseID() == releaseID) {
+
             return releaseObj;
         }
+        num++;
     }
-    return Release();       // Return Empty Release so we can check for Release ID to be zero to indiciate that no Release Object with given ID found
+    return Release(0, 0, "", "");       // Return Empty Release so we can check for Release ID to be zero to indiciate that no Release Object with given ID found
 }

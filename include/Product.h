@@ -108,7 +108,18 @@ public:
     // @return - True if the record was found, false otherwise
     static Product findProductRecord(int productID);
 
+    // Prints all the Products
     static void printAllProducts();
+
+    // Static method to read the last ID from a file
+    static void readLastID();
+
+    // Static method to write the current ID to a file
+    static void writeLastID();
+
+    // Keeps count of Product IDs
+    static int productIDCount;
+
 
 private:
     int productID;

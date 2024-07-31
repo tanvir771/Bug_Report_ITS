@@ -19,6 +19,8 @@ std::string Product::fileName = "product_default.dat";  // set a default fileNam
 std::ofstream Product::fout;
 std::fstream Product::fin;
 
+int Product::productIDCount = 0;
+
 // Helper Printing Functions
 void printTable() {
     std::cout << std::setw(15) << std::right << "Product ID"
@@ -43,7 +45,7 @@ Product::Product() : productID(0), isAnticipatedRelease(false) {
 
 // Parameterized constructor
 Product::Product(int productID, Release& release, const std::string &name, const std::string &releaseDate)
-    : productID(productID),  productRelease(release), isAnticipatedRelease(false) {
+    : productID(++productIDCount),  productRelease(release), isAnticipatedRelease(false) {
     std::strncpy(this->name, name.c_str(), sizeof(this->name) - 1);
 }
 
@@ -165,6 +167,7 @@ bool Product::writeProduct(Product& productObject) {
 
     closeWriteFile();
     std::cout << "Data written to product.dat successfully." << std::endl;
+    writeLastID();              // Save Last ID to file
     return true;
 }
 
@@ -175,7 +178,6 @@ void Product::seekToBeginningOfFile() {
     }
 }
 
-//
 // Reads the next Product object from the file
 bool Product::getNext(Product& productObject, int index) {
     if (!openReadFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/product.dat")) {
@@ -191,7 +193,7 @@ bool Product::getNext(Product& productObject, int index) {
     Product::fin.read(reinterpret_cast<char*>(&productObject), sizeof(Product));
 
     if (Product::fin.eof()) {
-        std::cout << "End of file reached prematurely" << std::endl;
+        std::cout << "End of file reached" << std::endl;
         closeReadFile();
         return false;
     }
@@ -230,5 +232,25 @@ void Product::printAllProducts()
     while (getNext(productObj, num)) {
         printObj(productObj);
         num++;
+    }
+}
+
+// Static method to read the last ID from a file
+void Product::readLastID() {
+    std::ifstream fin("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::binary);
+    if (fin.is_open()) {
+        fin.seekg(2 * sizeof(productIDCount), std::ios::beg);
+        fin.read(reinterpret_cast<char*>(&productIDCount), sizeof(productIDCount));
+        fin.close();
+    }
+}
+
+// Static method to write the current ID to a file
+void Product::writeLastID() {
+    std::ofstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);
+    if (fout.is_open()) {
+        fout.seekp(2 * sizeof(productIDCount), std::ios::beg);
+        fout.write(reinterpret_cast<const char*>(&productIDCount), sizeof(productIDCount));
+        fout.close();
     }
 }

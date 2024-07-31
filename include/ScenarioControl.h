@@ -26,11 +26,6 @@ public:
     // @return Product The created Product object.
     Product createProduct();
 
-    // @brief Deletes a Product object from the product list by ID.
-    // @param productID The ID of the product to delete.
-    // @return bool True if the product was found and deleted, false otherwise.
-    bool deleteProduct();
-
     // Bug operations
     // @brief Creates a new Bug object and adds it to the Bug file
     // @param bugID The ID of the bug.

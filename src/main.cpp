@@ -53,6 +53,7 @@ int main() {
         // Update the static IDs with Last ID count
         Bug::readLastID();
         Request::readLastID();
+        Product::readLastID();
 
         switch (choice) {
         case 0:
@@ -115,7 +116,7 @@ int main() {
         }
 
         std::cout << std::endl; // Print a new line for better readability
-    } while (choice != 5);
+    } while (choice != 0);
 
     return 0;
 }

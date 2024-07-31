@@ -267,38 +267,29 @@ Request Request::findRequestRecord(int changeRequestID) {
     int num = 0;
     while (getNext(requestObj, num)) {
         if (requestObj.getRequestID() == changeRequestID) {
-            num++;
             return requestObj;
         }
+        ++num;
     }
     return requestObj;
 }
-// Static method to read the last request ID from a file
+
+// Static method to read the last ID from a file
 void Request::readLastID() {
     std::ifstream fin("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::binary);
     if (fin.is_open()) {
-        // Skip the bug ID count bytes
-        fin.seekg(sizeof(int), std::ios::beg);
-
-        // Read the request ID count
+        fin.seekg(sizeof(requestIDCount), std::ios::beg);
         fin.read(reinterpret_cast<char*>(&requestIDCount), sizeof(requestIDCount));
         fin.close();
     }
 }
 
-// Static method to write the current request ID to a file
+// Static method to write the current ID to a file
 void Request::writeLastID() {
-    std::fstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::out | std::ios::binary);
-    if (!fout.is_open()) {
-        fout.open("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);
+    std::ofstream fout("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::out | std::ios::binary);
+    if (fout.is_open()) {
+        fout.seekp(sizeof(requestIDCount), std::ios::beg);
+        fout.write(reinterpret_cast<const char*>(&requestIDCount), sizeof(requestIDCount));
         fout.close();
-        fout.open("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/id.dat", std::ios::in | std::ios::out | std::ios::binary);
     }
-
-    // Skip the bug ID count bytes
-    fout.seekp(sizeof(int), std::ios::beg);
-
-    // Write the request ID count
-    fout.write(reinterpret_cast<const char*>(&requestIDCount), sizeof(requestIDCount));
-    fout.close();
 }
