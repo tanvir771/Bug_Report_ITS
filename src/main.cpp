@@ -19,18 +19,19 @@
 void ShowMenu() {
     std::cout << "Application Menu" << std::endl;
     std::cout << "0. Exit" << std::endl;
-    std::cout << "1. Create Bug" << std::endl;
-    std::cout << "2. Modify Bug" << std::endl;
-    std::cout << "3. Delete Bug" << std::endl;
-    std::cout << "4. Create Request" << std::endl;
-    std::cout << "5. Modify Request" << std::endl;
-    std::cout << "6. Create a Customer" << std::endl;
-    std::cout << "7. Delete a Customer" << std::endl;
+    std::cout << "1. Create Request" << std::endl;
+    std::cout << "2. Modify Request" << std::endl;
+    std::cout << "3. Modify Bug" << std::endl;
+    std::cout << "4. Delete Bug" << std::endl;
+    std::cout << "5. Report all Products" << std::endl;
+    std::cout << "6. Create a Product" << std::endl;
+    std::cout << "7. Create a Customer" << std::endl;
     std::cout << "8. Check if a Customer Exists" << std::endl;
-    std::cout << "9. Report #1" << std::endl;
-    std::cout << "10. Report #2" << std::endl;
-    std::cout << "11. Create Product" << std::endl;
-    std::cout << "12. Check if Product exists" << std::endl;
+    std::cout << "9. Check if Product exists" << std::endl;
+    std::cout << "10. Report Bugs by Product" << std::endl;
+    std::cout << "11. Report Bugs by Severity" << std::endl;
+    std::cout << "12. Report Bugs by Status" << std::endl;
+    
 }
 
 
@@ -38,11 +39,6 @@ void ShowMenu() {
 // Main Function
 //================================
 int main() {
-
-    // // Loop until valid credentials are entered
-    // while (!CheckCredentials()) {
-    //     std::cout << "Please try again." << std::endl;
-    // }
 
     ScenarioControl control = ScenarioControl();
 
@@ -59,52 +55,52 @@ int main() {
             std::cout << "Exiting the program..." << std::endl;
             return 0;
         case 1:
-            std::cout << "You selected Create Bug" << std::endl;
-            control.createBug();
-            break;
-        case 2:
-            std::cout << "You selected Modify Bug" << std::endl;
-            control.modifyBug();
-            break;
-        case 3:
-            std::cout << "You selected Delete Bug" << std::endl;
-            control.deleteBug();
-            break;
-        case 4:
             std::cout << "You selected Create Request" << std::endl;
             control.createRequest();
             break;
-        case 5:
+        case 2:
             std::cout << "You selected Modify Request" << std::endl;
             control.modifyRequest();
             break;
+        case 3:
+            std::cout << "You selected Modify Bug" << std::endl;
+            control.modifyBug();
+            break;
+        case 4:
+            std::cout << "You selected Delete Bug" << std::endl;
+            control.deleteBug();
+            break;
+        case 5:
+            std::cout << "You selected Report all Products" << std::endl;
+            // TODO:  Report all Products
+            break;
         case 6:
-            std::cout << "You selected Create Customer" << std::endl;
-            control.createCustomer();
+            std::cout << "You selected Create Product" << std::endl;
+            control.createProduct();
             break;
         case 7:
-            std::cout << "You selected Delete Customer" << std::endl;
-            control.deleteCustomer();
+            std::cout << "You selected Create Customer" << std::endl;
+            control.createCustomer();
             break;
         case 8:
             std::cout << "You selected Check if Customer Exists" << std::endl;
             control.findCustomer();
             break;
         case 9:
-            std::cout << "You selected Report #1" << std::endl;
-            control.report1();
-            break;
-        case 10:
-            std::cout << "You selected Report #2" << std::endl;
-            control.report2();
-            break;
-        case 11:
-            std::cout << "You selected Create Product" << std::endl;
-            control.createProduct();
-            break;
-        case 12:
             std::cout << "You selected Check if Product Exists" << std::endl;
             control.findProduct();
+            break;
+        case 10:
+            std::cout << "You selected Report Bugs by Product" << std::endl;
+            control.report1();
+            break;
+        case 11:
+            std::cout << "You selected Report Bugs by Severity" << std::endl;
+            control.report2();
+            break;
+        case 12:
+            std::cout << "You selected Report Bugs by Status" << std::endl;
+            // TODO: report bugs by status
             break;
         default:
             std::cout << "Invalid choice. Please select a valid option (1-5)." << std::endl;

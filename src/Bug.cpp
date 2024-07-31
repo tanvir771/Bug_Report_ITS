@@ -48,7 +48,6 @@ Bug::Bug() : bugID(0), productID(0), releaseID(0) {
 }
 
 // Parameterized constructor
-//TODO: we do not use bugID
 Bug::Bug(int bugID, const std::string& desc, const std::string& sev, const std::string& stat, int productID, int releaseID)
     : bugID(++bugIDCount), productID(productID), releaseID(releaseID) 
 {

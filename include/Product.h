@@ -118,7 +118,6 @@ private:
     char name[150];
     Release productRelease; // if a future Release, then this is the anticipatedRelease
     bool isAnticipatedRelease; // represents whether the Product Release is in the future or not
-    // TODO: figure out what to do with isAnticipatedRelease
 
     static std::string fileName;  // The name of the currently open file
 

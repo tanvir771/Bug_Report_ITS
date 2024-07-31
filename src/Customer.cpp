@@ -32,7 +32,7 @@ Customer::Customer(const std::string &name, const std::string &phone, const std:
     std::strncpy(this->customerName, name.c_str(), sizeof(this->customerName) - 1);
     std::strncpy(this->phone, phone.c_str(), sizeof(this->phone) - 1);
     std::strncpy(this->email, email.c_str(), sizeof(this->email) - 1);
-    std::strncpy(this->email, email.c_str(), sizeof(this->email) - 1);
+    std::memset(department, 0, sizeof(department));         // Initially empty; have to set up manually
 }
 
 // Getters

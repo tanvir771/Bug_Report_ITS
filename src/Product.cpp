@@ -128,7 +128,6 @@ void Product::closeReadFile()
     }
 }
 
-
 bool Product::writeProduct(Product& productObject) {
     if (!openWriteFile("E:/SFU/Cmpt276/Assignment4_VS/Bug_Report/src/product.dat")) {
         std::cout << "Could not open Write file" << std::endl;

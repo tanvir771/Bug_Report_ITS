@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <limits>
 
 #include "Product.h"
 #include "Bug.h"
@@ -63,6 +64,7 @@ Product ScenarioControl::createProduct()
     int releaseID;
     std::string name;
     std::string version;
+    std::string anticipated;
 
     // TODO: should make the ID assignment automatic
     std::cout << "Enter Product ID: ";
@@ -75,8 +77,23 @@ Product ScenarioControl::createProduct()
     std::cout << "Enter Product Version: ";
     std::getline(std::cin, version);
 
-    std::cout << "Enter Release ID: ";
-    std::cin >> releaseID;
+    while (true) {
+        std::cout << "Enter Release ID: ";
+        std::cin >> releaseID;
+
+        // Check if the input is valid
+        if (std::cin.fail()) {
+            // Clear the error flag
+            std::cin.clear();
+            // Ignore the invalid input
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+        }
+        else {
+            // If input is valid, break out of the loop
+            break;
+        }
+    }
 
     Release tempRelease = Release::findReleaseRecord(releaseID);
 
@@ -107,14 +124,27 @@ Product ScenarioControl::createProduct()
 
     Product newProduct = Product(productID, tempRelease, name, version);
 
+    while (true) {
+        std::cin.ignore();
+        std::cout << "Enter if Release is Anticipated Release (Release date in the future)? (y/n): ";
+        std::getline(std::cin, anticipated);
+
+        if (anticipated == "y") {
+            newProduct.setAnticipatedRelease(true);
+            std::cout << "Product created successfully!" << std::endl;
+            break;
+        }
+        else if (anticipated == "n") {
+            newProduct.setAnticipatedRelease(false);
+            std::cout << "Product created successfully!" << std::endl;
+            break;
+        }
+        else {
+            std::cout << "Invalid Input" << std::endl;
+        }
+    }
+
     Product::writeProduct(newProduct);
-
-    Product readProduct;
-
-    Product::getNext(readProduct, 0);
-
-    std::cout << readProduct.getName() << std::endl;
-    std::cout << readProduct.getReleaseDate() << std::endl;
 
     return newProduct;
 }
@@ -214,6 +244,9 @@ Customer ScenarioControl::createCustomer()
     std::string name;
     std::string phone;
     std::string email;
+    std::string isEmployee;
+
+    std::cin.ignore();
 
     std::cout << "Enter Customer Name: ";
     std::getline(std::cin, name);
@@ -224,8 +257,29 @@ Customer ScenarioControl::createCustomer()
     std::cout << "Enter Customer Email: ";
     std::getline(std::cin, email);
 
+    std::cout << "Is this customer an employee? (y/n): ";
+    std::getline(std::cin, isEmployee);
+
     Customer newCustomer = Customer(name, phone, email);
     std::cout << "Customer created successfully!" << std::endl;
+
+    while (true) {
+        if (isEmployee == "y") {
+            newCustomer.setIsEmployee(true);
+            std::string department;
+            std::cout << "Department: ";
+            std::getline(std::cin, department);
+            newCustomer.setDepartment(department);
+            break;
+        }
+        else if (isEmployee == "n") {
+            std::cout << "Department not required!" << std::endl;
+            break;
+        }
+        else {
+            std::cout << "Invalid Input!" << std::endl;
+        }
+    }
 
     Customer::writeCustomer(newCustomer);
     return Customer();
@@ -333,9 +387,7 @@ bool ScenarioControl::deleteRequest()
     std::cin >> requestID;
     std::cin.ignore();
 
-    request.deleteRequestRecord(requestID);
-
-    return true;
+    return request.deleteRequestRecord(requestID);;
 }
 
 // TODO: modify request and modify bug
